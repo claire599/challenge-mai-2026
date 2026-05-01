@@ -11,11 +11,13 @@
 html,body{overflow-x:hidden}
 body{font-family:'Outfit',sans-serif;background:linear-gradient(180deg,#fdf6e8 0%,#f3e5c0 100%);min-height:100vh;color:#1a1a2e;padding:16px;font-weight:500}
 
-h1{font-family:'Bebas Neue',sans-serif;text-align:center;font-size:clamp(2rem,8vw,3.2rem);letter-spacing:clamp(2px,1.2vw,6px);color:#1a1a2e;line-height:1;margin-bottom:6px}
+h1{font-family:'Bebas Neue',sans-serif;text-align:center;font-size:clamp(2rem,8vw,3.2rem);letter-spacing:clamp(2px,1.2vw,6px);color:#1a1a2e;line-height:1;margin:0}
 h1 .accent{color:#d63031}
-.hero-car{display:flex;justify-content:center;margin-bottom:6px;margin-top:-4px}
-.hero-car-svg{width:300px;height:auto;max-width:80vw;filter:drop-shadow(0 5px 10px rgba(0,0,0,.18))}
-.subtitle{text-align:center;font-size:.82rem;color:#7f8c8d;margin-bottom:6px;font-weight:600}
+.header-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:6px;flex-wrap:wrap}
+.hero-car{display:flex;justify-content:center}
+.hero-car-svg{width:200px;height:auto;max-width:60vw;filter:drop-shadow(0 5px 10px rgba(0,0,0,.18))}
+.subtitle{text-align:center;font-family:'Bebas Neue',sans-serif;font-size:1.15rem;color:#1a1a2e;margin-bottom:6px;letter-spacing:2px}
+.subtitle .sep{color:#d63031;font-weight:900;margin:0 6px}
 .sync-bar{text-align:center;font-size:.7rem;color:#00b894;margin-bottom:14px;min-height:14px;font-weight:700}
 
 /* ===== COCKPIT ===== */
@@ -98,7 +100,7 @@ h1 .accent{color:#d63031}
 .route-450-fill{position:absolute;top:0;bottom:0;left:0;width:0%;background:linear-gradient(90deg,#00b894,#00cec9);border-radius:50px 0 0 50px;transition:width .8s cubic-bezier(.34,1.56,.64,1)}
 .route-tick-mark{position:absolute;top:-5px;bottom:-5px;width:2px;background:rgba(255,255,255,.4)}
 .route-tick-mark.milestone{width:4px;background:#f9ca24;box-shadow:0 0 12px rgba(249,202,36,.7);top:-8px;bottom:-8px;border-radius:2px}
-.route-car{position:absolute;top:-9px;left:0%;transform:translateX(-50%);font-size:1.5rem;filter:drop-shadow(0 4px 6px rgba(0,206,201,.6));animation:carPulse 1.4s ease-in-out infinite;z-index:5;transition:left .8s cubic-bezier(.34,1.56,.64,1)}
+.route-car{position:absolute;top:-14px;left:0%;transform:translateX(-50%);font-size:2rem;filter:drop-shadow(0 4px 6px rgba(0,206,201,.6));animation:carPulse 1.4s ease-in-out infinite;z-index:5;transition:left .8s cubic-bezier(.34,1.56,.64,1)}
 .route-car-label{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:4px;background:#1a1a2e;color:#f9ca24;font-family:'Audiowide',sans-serif;font-size:.6rem;padding:2px 6px;border-radius:5px;border:1.5px solid #f9ca24;white-space:nowrap;line-height:1.2;box-shadow:0 2px 6px rgba(0,0,0,.4)}
 .route-car-label::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#f9ca24}
 @keyframes carPulse{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-3px)}}
@@ -222,36 +224,47 @@ h1 .accent{color:#d63031}
 @media (min-width:900px){
   body{padding:14px 28px;max-width:1500px;margin:0 auto}
   h1{font-size:3.4rem;letter-spacing:5px;margin-bottom:4px}
-  .subtitle{font-size:.92rem;margin-bottom:4px}
+  .subtitle{font-size:1.5rem;letter-spacing:3px;margin-bottom:6px}
+  .subtitle .sep{margin:0 10px}
   .sync-bar{font-size:.78rem;margin-bottom:12px}
 
-  .cockpit-outer{padding:16px 18px;border-radius:22px;margin-bottom:12px}
-  .cockpit-header{margin-bottom:10px;padding-bottom:8px}
-  .cockpit-title{font-size:1.4rem;letter-spacing:2px}
-  .cockpit-date{font-size:.95rem}
-  .cockpit-inner{padding:16px;border-radius:18px}
+  .cockpit-outer{padding:14px 16px;border-radius:20px;margin-bottom:10px}
+  .cockpit-header{margin-bottom:8px;padding-bottom:6px}
+  .cockpit-title{font-size:1.3rem;letter-spacing:2px}
+  .cockpit-date{font-size:.92rem}
+  .cockpit-inner{padding:14px;border-radius:16px}
 
-  .kpi-mini-row{gap:8px;margin-bottom:12px}
-  .kpi-mini{padding:9px 6px;border-radius:11px}
-  .kpi-mini .v{font-size:1.7rem}
-  .kpi-mini .l{font-size:.65rem;margin-top:3px;letter-spacing:.5px}
+  /* Layout 2 colonnes du cockpit sur PC */
+  .cockpit-inner{display:grid;grid-template-columns:1fr 320px;gap:14px;align-items:start}
+  .cockpit-main{min-width:0;display:flex;flex-direction:column;gap:0}
+  .cockpit-side{display:flex;flex-direction:column;gap:0;height:100%}
+  .cockpit-side .inputs-row{display:flex;flex-direction:column;gap:8px;height:100%}
+  .cockpit-side .input-section{flex:1;display:flex;flex-direction:column;justify-content:center}
+  .cockpit-main .route-450{margin-bottom:0}
+  .cockpit-main .gauges-row{margin-bottom:10px}
+  .cockpit-main .kpi-mini-row{margin-bottom:10px}
 
-  .gauges-row{gap:14px;margin-bottom:12px}
-  .gauge-wrap{padding:10px 8px 8px;border-radius:14px}
-  .gauge-label-top{font-size:.92rem;letter-spacing:1.6px;margin-bottom:4px}
-  .gauge-svg{max-width:200px}
+  .kpi-mini-row{gap:7px;margin-bottom:10px}
+  .kpi-mini{padding:7px 5px;border-radius:10px}
+  .kpi-mini .v{font-size:1.5rem}
+  .kpi-mini .l{font-size:.6rem;margin-top:2px;letter-spacing:.5px}
+
+  .gauges-row{gap:10px;margin-bottom:10px}
+  .gauge-wrap{padding:8px 6px 6px;border-radius:12px}
+  .gauge-label-top{font-size:.82rem;letter-spacing:1.4px;margin-bottom:3px}
+  .gauge-svg{max-width:180px}
   .gauge-readout{margin-top:-4px}
-  .gauge-value{font-size:1.7rem}
-  .gauge-unit{font-size:.72rem;margin-top:2px}
+  .gauge-value{font-size:1.5rem}
+  .gauge-unit{font-size:.7rem;margin-top:2px}
 
   .route-450{padding:12px 18px;margin-bottom:12px;border-radius:14px}
   .route-450-title{font-size:.88rem;letter-spacing:1.5px;margin-bottom:14px}
   .route-450-labels{height:24px;margin-bottom:6px}
   .rl-tick{font-size:.72rem}
   .rl-milestone{font-size:.82rem;padding:3px 10px}
-  .route-450-track{height:30px;border-radius:50px}
-  .route-car{font-size:2.4rem;top:-14px}
-  .route-car-label{font-size:.78rem;padding:3px 9px;border-radius:6px;margin-bottom:6px}
+  .route-450-track{height:34px;border-radius:50px}
+  .route-car{font-size:3.4rem;top:-26px}
+  .route-car-label{font-size:.85rem;padding:4px 10px;border-radius:7px;margin-bottom:7px}
   .route-finish{font-size:1.3rem;top:-25px}
   .route-ends{font-size:.78rem;margin-top:8px}
 
@@ -309,8 +322,10 @@ h1 .accent{color:#d63031}
   .mf label{font-size:.82rem}
   .mf input{padding:11px;font-size:1.1rem}
 
-  /* Voiture héro plus grande */
-  .hero-car-svg{width:420px}
+  /* Voiture héro à côté du titre */
+  .header-row{gap:20px;margin-bottom:4px}
+  h1{font-size:3rem;letter-spacing:5px}
+  .hero-car-svg{width:280px}
 }
 
 /* ===== GRAND ÉCRAN ≥ 1400px — petit boost ===== */
@@ -322,8 +337,10 @@ h1 .accent{color:#d63031}
   .bpd{height:50px}
   .bpd .num{font-size:.9rem}
   .tb .tn{font-size:2rem}
-  .hero-car-svg{width:480px}
-  .route-car{font-size:2.9rem;top:-17px}
+  .hero-car-svg{width:340px}
+  h1{font-size:3.6rem;letter-spacing:6px}
+  .route-car{font-size:4rem;top:-32px}
+  .route-car-label{font-size:.92rem;padding:5px 12px}
 }
 
 /* ===== MOBILE ===== */
@@ -339,8 +356,9 @@ h1 .accent{color:#d63031}
 </head>
 <body>
 
-<div class="hero-car">
-  <svg class="hero-car-svg" viewBox="0 0 440 160" xmlns="http://www.w3.org/2000/svg">
+<div class="header-row">
+  <div class="hero-car">
+    <svg class="hero-car-svg" viewBox="0 0 440 160" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stop-color="#e74c3c"/>
@@ -498,41 +516,56 @@ h1 .accent{color:#d63031}
 
     <!-- TÊTE 5 : brun à lunettes + barbe de 3 jours (conducteur) -->
     <g transform="translate(328,60)">
+      <!-- T-shirt bleu -->
       <path d="M -14 14 Q -14 8 -7 7 L 7 7 Q 14 8 14 14 L 14 16 L -14 16 Z" fill="#0984e3"/>
+      <!-- Cou -->
       <rect x="-3.5" y="3" width="7" height="6" fill="#f4c8a8"/>
       <!-- Visage -->
-      <ellipse cx="0" cy="0" rx="9.5" ry="11" fill="#f4c8a8" stroke="#1a1a2e" stroke-width="0.7"/>
-      <!-- Barbe 3 jours (zone bleutée hachurée sur le bas) -->
-      <path d="M -8.5 4 Q -8 9 -3 11 L 3 11 Q 8 9 8.5 4 Q 7 8 0 8 Q -7 8 -8.5 4 Z" fill="#3a4858" opacity="0.5"/>
-      <!-- Petits points pour la texture barbe -->
-      <circle cx="-5" cy="6" r="0.4" fill="#1a1a2e" opacity="0.6"/>
-      <circle cx="-3" cy="7.5" r="0.4" fill="#1a1a2e" opacity="0.6"/>
-      <circle cx="0" cy="8" r="0.4" fill="#1a1a2e" opacity="0.6"/>
-      <circle cx="3" cy="7.5" r="0.4" fill="#1a1a2e" opacity="0.6"/>
-      <circle cx="5" cy="6" r="0.4" fill="#1a1a2e" opacity="0.6"/>
-      <!-- Cheveux courts bruns -->
-      <path d="M -11 -3 Q -11 -13 0 -13 Q 11 -13 11 -3 L 11 -1 Q 8 -4 0 -4 Q -8 -4 -11 -1 Z" fill="#2c1810"/>
-      <!-- Mèche frontale -->
-      <path d="M -6 -7 Q -2 -10 4 -8 Q 6 -5 0 -3 Q -5 -3 -6 -7 Z" fill="#2c1810"/>
-      <!-- Lunettes carrées -->
-      <rect x="-7" y="-2" width="6" height="6" rx="1" fill="#fff" opacity="0.4" stroke="#1a1a2e" stroke-width="1.2"/>
-      <rect x="1" y="-2" width="6" height="6" rx="1" fill="#fff" opacity="0.4" stroke="#1a1a2e" stroke-width="1.2"/>
-      <line x1="-1" y1="1" x2="1" y2="1" stroke="#1a1a2e" stroke-width="1"/>
+      <ellipse cx="0" cy="0" rx="9" ry="10.5" fill="#f4c8a8" stroke="#1a1a2e" stroke-width="0.7"/>
+      <!-- Barbe légère sur le contour de la mâchoire -->
+      <path d="M -8 3 Q -7 8 -3 10 Q 0 11 3 10 Q 7 8 8 3" stroke="#4a5868" stroke-width="2.2" fill="none" opacity="0.5" stroke-linecap="round"/>
+      <!-- Cheveux courts bruns proprement coiffés -->
+      <path d="M -10 -3 Q -10 -13 0 -13 Q 10 -13 10 -3 Q 9 -6 6 -6 Q 3 -4 0 -4 Q -3 -6 -6 -6 Q -9 -6 -10 -3 Z" fill="#2c1810"/>
+      <!-- Petite mèche frontale -->
+      <path d="M -2 -8 Q 1 -11 5 -8 Q 5 -5 0 -4 Q -3 -5 -2 -8 Z" fill="#2c1810"/>
+      <!-- Lunettes simples (cercles) -->
+      <circle cx="-4" cy="1" r="2.6" fill="#fff" opacity="0.3" stroke="#1a1a2e" stroke-width="1"/>
+      <circle cx="4" cy="1" r="2.6" fill="#fff" opacity="0.3" stroke="#1a1a2e" stroke-width="1"/>
+      <line x1="-1.4" y1="1" x2="1.4" y2="1" stroke="#1a1a2e" stroke-width="0.9"/>
       <!-- Branches -->
-      <line x1="7" y1="1" x2="9.5" y2="0" stroke="#1a1a2e" stroke-width="1"/>
-      <line x1="-7" y1="1" x2="-9.5" y2="0" stroke="#1a1a2e" stroke-width="1"/>
-      <!-- Yeux -->
+      <line x1="6.6" y1="0.5" x2="9" y2="0" stroke="#1a1a2e" stroke-width="0.9"/>
+      <line x1="-6.6" y1="0.5" x2="-9" y2="0" stroke="#1a1a2e" stroke-width="0.9"/>
+      <!-- Yeux derrière les lunettes -->
       <circle cx="-4" cy="1" r="0.7" fill="#1a1a2e"/>
       <circle cx="4" cy="1" r="0.7" fill="#1a1a2e"/>
+      <!-- Sourire -->
+      <path d="M -2.5 5.5 Q 0 7 2.5 5.5" stroke="#1a1a2e" stroke-width="1" fill="none" stroke-linecap="round"/>
     </g>
 
-    <!-- Mains du conducteur sur le volant (petit détail mignon) -->
+    <!-- Mains du conducteur sur le volant -->
     <circle cx="328" cy="78" r="2.5" fill="#f4c8a8" stroke="#1a1a2e" stroke-width="0.5"/>
-  </svg>
-</div>
 
-<h1>LE <span class="accent">450 BORNES</span></h1>
-<p class="subtitle">Mai 2026 · Paris → Saint-Malo · 1 vente = 1 borne</p>
+    <!-- ===== LOGO WEDIVORCE sur la portière ===== -->
+    <g transform="translate(140, 95) scale(0.32)">
+      <!-- Fond blanc arrondi pour le logo -->
+      <rect x="-12" y="-8" width="232" height="46" rx="8" fill="#fff" stroke="#1a1a2e" stroke-width="2"/>
+      <!-- Lettres wedivorce (gris foncé) -->
+      <path fill="#38343c" d="M90.46,1.62V28.33H85.09V26.1a7.39,7.39,0,0,1-6,2.52,10.09,10.09,0,0,1-5-1.22,8.75,8.75,0,0,1-3.48-3.5,10.62,10.62,0,0,1-1.26-5.25,10.66,10.66,0,0,1,1.26-5.26A8.79,8.79,0,0,1,74.1,9.9a10,10,0,0,1,5-1.22A7.35,7.35,0,0,1,84.84,11V1.62ZM83.55,22.55a5.4,5.4,0,0,0,1.4-3.9,5.43,5.43,0,0,0-1.4-3.91,5,5,0,0,0-7.1,0,5.43,5.43,0,0,0-1.4,3.91,5.4,5.4,0,0,0,1.4,3.9,5,5,0,0,0,7.1,0Z"/>
+      <path fill="#38343c" d="M95.93,5.36a2.9,2.9,0,0,1-1-2.23,2.9,2.9,0,0,1,1-2.23A3.57,3.57,0,0,1,98.45,0,3.69,3.69,0,0,1,101,.86a2.77,2.77,0,0,1,1,2.16,3.07,3.07,0,0,1-1,2.33,3.53,3.53,0,0,1-2.52.91A3.57,3.57,0,0,1,95.93,5.36ZM95.64,9h5.62V28.33H95.64Z"/>
+      <path fill="#38343c" d="M134.85,27.34a9.48,9.48,0,0,1-3.8-3.54,9.81,9.81,0,0,1-1.36-5.15,9.79,9.79,0,0,1,1.36-5.15,9.57,9.57,0,0,1,3.8-3.55,11.63,11.63,0,0,1,5.49-1.27A11.5,11.5,0,0,1,145.81,10a9.58,9.58,0,0,1,3.78,3.55A9.7,9.7,0,0,1,151,18.65a9.73,9.73,0,0,1-1.37,5.15,9.49,9.49,0,0,1-3.78,3.54,11.5,11.5,0,0,1-5.47,1.28A11.64,11.64,0,0,1,134.85,27.34Zm9-4.79a5.43,5.43,0,0,0,1.38-3.9,5.46,5.46,0,0,0-1.38-3.91,5.06,5.06,0,0,0-7.11,0,5.39,5.39,0,0,0-1.41,3.91,5.37,5.37,0,0,0,1.41,3.9,5.06,5.06,0,0,0,7.11,0Z"/>
+      <path fill="#38343c" d="M162.79,9.4a10.07,10.07,0,0,1,3.94-.72v5.18c-.62,0-1-.07-1.26-.07a5.14,5.14,0,0,0-3.78,1.35,5.46,5.46,0,0,0-1.37,4.05v9.14h-5.61V9h5.36v2.56A6.2,6.2,0,0,1,162.79,9.4Z"/>
+      <path fill="#38343c" d="M173.7,27.34a9.58,9.58,0,0,1-3.86-3.54,9.73,9.73,0,0,1-1.38-5.15A9.48,9.48,0,0,1,173.7,10a11.89,11.89,0,0,1,5.56-1.27A10.76,10.76,0,0,1,184.6,10a7.54,7.54,0,0,1,3.33,3.66L183.58,16a4.76,4.76,0,0,0-4.36-2.67,4.92,4.92,0,0,0-3.63,1.44,5.31,5.31,0,0,0-1.44,3.93,5.3,5.3,0,0,0,1.44,3.92A4.92,4.92,0,0,0,179.22,24a4.73,4.73,0,0,0,4.36-2.66l4.35,2.37a7.63,7.63,0,0,1-3.33,3.6,10.56,10.56,0,0,1-5.34,1.3A11.9,11.9,0,0,1,173.7,27.34Z"/>
+      <path fill="#38343c" d="M209.79,20.23H195.13A4.6,4.6,0,0,0,197,23.08a6.21,6.21,0,0,0,3.67,1,7.42,7.42,0,0,0,2.68-.45,6.45,6.45,0,0,0,2.18-1.42l3,3.24c-1.83,2.09-4.49,3.13-8,3.13a12.65,12.65,0,0,1-5.79-1.28,9.35,9.35,0,0,1-3.89-3.54,9.82,9.82,0,0,1-1.37-5.15,9.88,9.88,0,0,1,1.35-5.13A9.51,9.51,0,0,1,194.54,10a10.89,10.89,0,0,1,5.27-1.27A10.73,10.73,0,0,1,205,9.9a9,9,0,0,1,3.62,3.51,10.4,10.4,0,0,1,1.31,5.31C209.89,18.79,209.86,19.3,209.79,20.23ZM196.65,14a4.58,4.58,0,0,0-1.59,3h9.54A4.64,4.64,0,0,0,203,14a4.76,4.76,0,0,0-3.17-1.1A4.82,4.82,0,0,0,196.65,14Z"/>
+      <path fill="#38343c" d="M33.66,8.9l-7,19.37h-5.4l-4.36-12-4.5,12H7L0,8.9H5.29L9.86,22,14.62,8.9h4.75L24,22,28.69,8.9Z"/>
+      <path fill="#38343c" d="M54.61,20.17H40A4.58,4.58,0,0,0,41.83,23a6.26,6.26,0,0,0,3.67,1,7.47,7.47,0,0,0,2.69-.45,6.41,6.41,0,0,0,2.17-1.42l3,3.24c-1.82,2.09-4.49,3.13-8,3.13a12.7,12.7,0,0,1-5.8-1.28,9.32,9.32,0,0,1-3.88-3.54,9.73,9.73,0,0,1-1.37-5.15,9.88,9.88,0,0,1,1.35-5.13,9.44,9.44,0,0,1,3.71-3.57,10.89,10.89,0,0,1,5.27-1.27,10.76,10.76,0,0,1,5.15,1.22,9.05,9.05,0,0,1,3.62,3.51,10.5,10.5,0,0,1,1.31,5.31C54.72,18.73,54.68,19.24,54.61,20.17ZM41.47,13.94a4.62,4.62,0,0,0-1.58,3h9.54A4.61,4.61,0,0,0,47.84,14a4.73,4.73,0,0,0-3.16-1.1A4.85,4.85,0,0,0,41.47,13.94Z"/>
+      <!-- Coche verte -->
+      <path fill="#82c1a0" d="M113.86,28.55a2.51,2.51,0,0,1-1.79-.75l-7.15-7.29,3.57-3.5,5.2,5.3,11-13.49L128.58,12,115.79,27.64a2.48,2.48,0,0,1-1.82.91Z"/>
+    </g>
+  </svg>
+  </div>
+  <h1>LE <span class="accent">450 BORNES</span></h1>
+</div>
+<p class="subtitle">Mai 2026 <span class="sep">·</span> Paris → Saint-Malo <span class="sep">·</span> 1 vente = 1 borne</p>
 <div class="sync-bar" id="syncBar">⏳ Chargement…</div>
 
 <div id="app" style="display:none">
@@ -544,7 +577,7 @@ h1 .accent{color:#d63031}
     <div class="cockpit-date" id="tcDate">—</div>
   </div>
   <div class="cockpit-inner">
-
+   <div class="cockpit-main">
     <div class="kpi-mini-row">
       <div class="kpi-mini"><div class="v" id="kRep">0</div><div class="l">☀️ Report</div></div>
       <div class="kpi-mini"><div class="v" id="kSal">—</div><div class="l">✍️ Ventes</div></div>
@@ -659,6 +692,8 @@ h1 .accent{color:#d63031}
       </div>
     </div>
 
+   </div><!-- /cockpit-main -->
+   <div class="cockpit-side">
     <div class="inputs-row">
       <div class="input-section">
         <div class="input-title">✍️ Ventes du jour</div>
@@ -667,7 +702,7 @@ h1 .accent{color:#d63031}
           <input type="number" id="iSal" placeholder="0" min="0">
           <button class="bsm" onclick="adjSal(1)">+</button>
         </div>
-        <button class="btn-save btn-green" onclick="saveVentes()">✓ Valider</button>
+        <button class="btn-save btn-green" id="btnSaveVentes" onclick="saveVentes()">✓ Valider</button>
       </div>
       <div class="input-section rdv">
         <div class="input-title">📞 RDV transférés</div>
@@ -676,9 +711,10 @@ h1 .accent{color:#d63031}
           <input type="number" id="iRdv" placeholder="0" min="0">
           <button class="bsm" onclick="adjRdv(1)">+</button>
         </div>
-        <button class="btn-save btn-teal" onclick="saveRdv()">✓ Valider</button>
+        <button class="btn-save btn-teal" id="btnSaveRdv" onclick="saveRdv()">✓ Valider</button>
       </div>
     </div>
+   </div><!-- /cockpit-side -->
   </div>
 </div>
 
@@ -1228,13 +1264,25 @@ function renderPlateau(){
     t2.setAttribute('font-family','Audiowide');t2.setAttribute('font-size',numFs);t2.setAttribute('fill',col);
     if(i>todayIdx())t2.setAttribute('opacity','0.6');
     t2.textContent=(i+1);labelsG.appendChild(t2);
-    // Etat
+    // Etat (ventes / obj) — texte jaune avec contour noir fin
     if(stateTxt){
-      var t3=document.createElementNS('http://www.w3.org/2000/svg','text');
-      t3.setAttribute('x',rect.cx);t3.setAttribute('y',yState);
-      t3.setAttribute('font-size',fontSize);t3.setAttribute('fill',col);
-      if(i===todayIdx())t3.setAttribute('font-weight','900');
-      t3.textContent=stateTxt;labelsG.appendChild(t3);
+      var stateFs=rect.row===4?11:12;
+      var cellColor=dayCellColor(i);
+      var isYellowCell = (cellColor === '#f9ca24');
+      var tEt=document.createElementNS('http://www.w3.org/2000/svg','text');
+      tEt.setAttribute('x',rect.cx);
+      tEt.setAttribute('y',yState);
+      tEt.setAttribute('font-size',stateFs);
+      tEt.setAttribute('font-weight','900');
+      if(isYellowCell){
+        tEt.setAttribute('fill','#1a1a2e');
+      }else{
+        tEt.setAttribute('fill','#f9ca24');
+        tEt.setAttribute('stroke','#1a1a2e');
+        tEt.setAttribute('stroke-width','0.6');
+        tEt.setAttribute('paint-order','stroke fill');
+      }
+      tEt.textContent=stateTxt;labelsG.appendChild(tEt);
     }
   }
   // Voiture sur le jour courant
@@ -1256,15 +1304,26 @@ function renderPlateau(){
 function adjSal(v){var el=document.getElementById('iSal');el.value=Math.max(0,(parseInt(el.value)||0)+v);}
 function adjRdv(v){var el=document.getElementById('iRdv');el.value=Math.max(0,(parseInt(el.value)||0)+v);}
 
-// ===== SAVE RDV =====
+// ===== SAVE RDV (optimiste) =====
 function saveRdv(){
-  sync('⏳ Enregistrement…','#7f8c8d');
+  var ti=todayIdx();
+  var rdv=parseInt(document.getElementById('iRdv').value);
+  if(isNaN(rdv)||rdv<0){showToast('❌ Valeur invalide');return;}
+  var prevLocal=S.rdv[ti]||0;
+  if(rdv<prevLocal){showToast('⚠️ Anti-régression : '+prevLocal+' RDV déjà saisis');document.getElementById('iRdv').value=prevLocal;return;}
+  var btn=document.getElementById('btnSaveRdv');
+  if(btn){btn.disabled=true;btn.style.opacity='0.6';btn.textContent='⏳ Sync…';}
+  showToast('✅ Enregistré');
+  sync('⏳ Sync…','#7f8c8d');
+
+  // Application immédiate locale
+  S.rdv[ti]=rdv;
+  render();
+
+  // Sync background
   loadShared().then(function(){
-    var ti=todayIdx();
-    var rdv=parseInt(document.getElementById('iRdv').value);
-    if(isNaN(rdv)||rdv<0){showToast('❌ Valeur invalide');return;}
     var prev=S.rdv[ti]||0;
-    if(rdv<prev){showToast('⚠️ Anti-régression : '+prev+' RDV déjà saisis');document.getElementById('iRdv').value=prev;return;}
+    if(prev>rdv){rdv=prev;document.getElementById('iRdv').value=prev;}
     S.rdv[ti]=rdv;
     var added=rdv-prev;
     if(added>0){for(var n=0;n<added;n++){(function(d){setTimeout(function(){spawnFlyingPhone();},d);})(n*200);}}
@@ -1279,20 +1338,37 @@ function saveRdv(){
         })(t);
       }
     }
-    render();saveShared();
+    render();
+    saveShared().then(function(){
+      if(btn){btn.disabled=false;btn.style.opacity='1';btn.textContent='✓ Valider';}
+    }).catch(function(){
+      if(btn){btn.disabled=false;btn.style.opacity='1';btn.textContent='✓ Valider';}
+    });
   });
 }
 
-// ===== SAVE VENTES =====
+// ===== SAVE VENTES (optimiste — UI rapide) =====
 function saveVentes(){
-  sync('⏳ Enregistrement…','#7f8c8d');
+  var ti=todayIdx();
+  if(WORKED[ti]===0){showToast('⛔ Pas de challenge aujourd\'hui !');return;}
+  var sal=parseInt(document.getElementById('iSal').value);
+  if(isNaN(sal)||sal<0){showToast('❌ Indiquer les ventes');return;}
+  var prevLocal=S.sal[ti]||0;
+  if(prevLocal>0&&sal<prevLocal){showToast('⚠️ Anti-régression : '+prevLocal+' ventes déjà saisies');document.getElementById('iSal').value=prevLocal;return;}
+  // Désactiver le bouton + feedback visuel
+  var btn=document.getElementById('btnSaveVentes');
+  if(btn){btn.disabled=true;btn.style.opacity='0.6';btn.textContent='⏳ Sync…';}
+  showToast('✅ Enregistré');
+  sync('⏳ Sync…','#7f8c8d');
+
+  // Application immédiate locale (UI rapide)
+  S.sal[ti]=sal;
+  render();
+
+  // Sync en background : loadShared → traitement → saveShared
   loadShared().then(function(){
-    var ti=todayIdx();
-    if(WORKED[ti]===0){showToast('⛔ Pas de challenge aujourd\'hui !');return;}
-    var sal=parseInt(document.getElementById('iSal').value);
-    if(isNaN(sal)||sal<0){showToast('❌ Indiquer les ventes');return;}
-    var prev=S.sal[ti]||0;
-    if(prev>0&&sal<prev){showToast('⚠️ Anti-régression : '+prev+' ventes déjà saisies');document.getElementById('iSal').value=prev;return;}
+    var prev=S.sal[ti]||0; // valeur partagée après reload
+    if(prev>sal){sal=prev;document.getElementById('iSal').value=prev;}
     var added=sal-prev,rep=S.rep[ti]||0,obj=S.obj[ti]||0;
     var prevCumul=prev+rep,newCumul=sal+rep;
     var prevBoostHalf=prev>=8,prevObjHalf=obj>0&&prevCumul>=Math.round(obj*0.5);
@@ -1301,7 +1377,7 @@ function saveVentes(){
     S.sal[ti]=sal;
     if(!S.events) S.events=[];
 
-    // Init / réinit jalons secrets m1, m2 (pour la journée)
+    // Init / réinit jalons secrets m1, m2
     if(!S.milestones||S.milestones.day!==ti||!S.milestones.m1||!S.milestones.m2){
       var mid=Math.max(1,Math.round(obj*0.5)),sc=rep;
       var m1=Math.round(sc+1+Math.random()*Math.max(0,mid-sc-2));
@@ -1316,13 +1392,10 @@ function saveVentes(){
     }
 
     render();
-
-    // Animation +1 par vente ajoutée
     if(added>0){for(var n=0;n<added;n++){(function(d){setTimeout(function(){spawnPlusOne(1);},d);})(n*150);}}
-
     var a=assess(ti);
 
-    // ===== JALONS SECRETS m1 / m2 — bons individuels =====
+    // Jalons secrets m1, m2
     if(obj>0&&!S.milestones.m1done&&prevCumul<S.milestones.m1&&newCumul>=S.milestones.m1){
       S.milestones.m1done=true;var ts1=Date.now();var p1=randomIndivPrize();
       pushEvent('ticket',{prize:p1,ts:ts1});setTimeout(function(){spawnGoldenTicketForAll(p1,ts1);},400);
@@ -1331,14 +1404,12 @@ function saveVentes(){
       S.milestones.m2done=true;var ts2=Date.now()+1;var p2=randomIndivPrize();
       pushEvent('ticket',{prize:p2,ts:ts2});setTimeout(function(){spawnGoldenTicketForAll(p2,ts2);},600);
     }
-
-    // ===== 50% Booster — info sympa (hors samedi) =====
+    // 50% Booster
     if(WORKED[ti]===1&&!prevBoostHalf&&sal>=8){
       pushEvent('floating',{icon:'⚡',label:'50% Régulateur !',size:'medium'});
       showFloatingIcon('⚡','50% Régulateur !','medium');
     }
-
-    // ===== RÉGULATEUR DÉCLENCHÉ (≥16v, hors samedi) — bon individuel =====
+    // Régulateur déclenché
     if(WORKED[ti]===1&&a.boostOk&&!prevBoost){
       if(!S.milestones.regulateurDone){
         S.milestones.regulateurDone=true;
@@ -1348,8 +1419,7 @@ function saveVentes(){
         setTimeout(function(){spawnRegulateurAnim(p3,ts3);},600);
       }
     }
-
-    // ===== 50% / 100% OBJECTIF =====
+    // 50% / 100% objectif
     if(obj>0&&!prevObjHalf&&newCumul>=Math.round(obj*0.5)){
       pushEvent('floating',{icon:'🎯',label:'50% Objectif !',size:'medium'});
       showFloatingIcon('🎯','50% Objectif !','medium');
@@ -1358,8 +1428,7 @@ function saveVentes(){
       pushEvent('objectifFlag',{});
       spawnObjectifFlag();
     }
-
-    // ===== EARLY BIRD (7v avant 14h) — bon individuel + trophée =====
+    // Early Bird
     if(!S.milestones.earlyBirdDone&&sal>=7&&(new Date().getHours()<14)){
       S.milestones.earlyBirdDone=true;var tseb=Date.now()+3;var pb=randomIndivPrize();
       pushEvent('earlybird',{prize:pb,ts:tseb});
@@ -1367,21 +1436,17 @@ function saveVentes(){
       spawnEarlyBirdAnim();
       setTimeout(function(){spawnGoldenTicketForAll(pb,tseb);},1500);
       addTrophy('🌅','Early Bird !',todayStr);
-      // Combo : si Turbo déjà fait → bon collectif Tournée glaces
       if(S.milestones.turboDone&&!S.milestones.glaceComboDone) triggerGlaceCombo();
     }
-
-    // ===== TURBO (≥obj+5, cap 1/jour) — bon individuel + trophée =====
+    // Turbo
     if(obj>0&&sal>=obj+5&&!S.milestones.turboDone){
       S.milestones.turboDone=true;var tst=Date.now()+4;var pt=randomIndivPrize();
       pushEvent('turbo',{prize:pt,ts:tst});
       pushEvent('turboF1',{});
       setTimeout(function(){spawnTurboAnim(pt,tst);addTrophy('🚀','Turbo !',todayStr);},400);
-      // Combo : si Early Bird déjà fait → bon collectif Tournée glaces
       if(S.milestones.earlyBirdDone&&!S.milestones.glaceComboDone) triggerGlaceCombo();
     }
-
-    // ===== JALON 200 (cumul mensuel) — bon collectif Resto routier =====
+    // Jalon 200
     var prevCumulMonth=cumulMonth()-added;
     var newCumulMonth=cumulMonth();
     if(!S.jalon200Done&&prevCumulMonth<JALON_BORNES&&newCumulMonth>=JALON_BORNES){
@@ -1394,7 +1459,11 @@ function saveVentes(){
       setTimeout(function(){spawnGoldenTicketForAll(COLLECTIF_RESTO,ts200);},2200);
     }
 
-    saveShared();
+    saveShared().then(function(){
+      if(btn){btn.disabled=false;btn.style.opacity='1';btn.textContent='✓ Valider';}
+    }).catch(function(){
+      if(btn){btn.disabled=false;btn.style.opacity='1';btn.textContent='✓ Valider';}
+    });
   });
 }
 
