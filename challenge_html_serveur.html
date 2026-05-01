@@ -13,6 +13,8 @@ body{font-family:'Outfit',sans-serif;background:linear-gradient(180deg,#fdf6e8 0
 
 h1{font-family:'Bebas Neue',sans-serif;text-align:center;font-size:clamp(2rem,8vw,3.2rem);letter-spacing:clamp(2px,1.2vw,6px);color:#1a1a2e;line-height:1;margin-bottom:6px}
 h1 .accent{color:#d63031}
+.hero-car{display:flex;justify-content:center;margin-bottom:6px;margin-top:-4px}
+.hero-car-svg{width:300px;height:auto;max-width:80vw;filter:drop-shadow(0 5px 10px rgba(0,0,0,.18))}
 .subtitle{text-align:center;font-size:.82rem;color:#7f8c8d;margin-bottom:6px;font-weight:600}
 .sync-bar{text-align:center;font-size:.7rem;color:#00b894;margin-bottom:14px;min-height:14px;font-weight:700}
 
@@ -129,8 +131,8 @@ h1 .accent{color:#d63031}
 .bpd.ok{background:#00b894;color:#fff}
 .bpd.fail{background:#d63031;color:#fff}
 .bpd.joker{background:#0984e3;color:#fff}
-.bpd.today{background:rgba(249,202,36,.3);border:2px solid #f9ca24;color:#1a1a2e}
-.bpd.future{background:#f5f0e0;color:#7f8c8d}
+.bpd.today{background:rgba(249,202,36,.35);border:2px solid #f9ca24;color:#1a1a2e}
+.bpd.future{background:#dde4ed;color:#5a6e8c;border:1px solid rgba(90,110,140,.15)}
 .bpd.nowork{background:#1a1a2e;color:rgba(255,255,255,.3);font-size:.5rem}
 .bpd.weekend{background:#5a6e8c;color:#fff}
 .bpd.weekend .ic{font-size:.55rem;opacity:.85}
@@ -216,6 +218,115 @@ h1 .accent{color:#d63031}
 .cc{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:200}
 .flying-phone{position:fixed;font-size:2rem;pointer-events:none;z-index:550;filter:drop-shadow(0 0 8px rgba(0,206,201,.6))}
 
+/* ===== TABLETTE / PC ≥ 900px — compact mais lisible ===== */
+@media (min-width:900px){
+  body{padding:14px 28px;max-width:1500px;margin:0 auto}
+  h1{font-size:3.4rem;letter-spacing:5px;margin-bottom:4px}
+  .subtitle{font-size:.92rem;margin-bottom:4px}
+  .sync-bar{font-size:.78rem;margin-bottom:12px}
+
+  .cockpit-outer{padding:16px 18px;border-radius:22px;margin-bottom:12px}
+  .cockpit-header{margin-bottom:10px;padding-bottom:8px}
+  .cockpit-title{font-size:1.4rem;letter-spacing:2px}
+  .cockpit-date{font-size:.95rem}
+  .cockpit-inner{padding:16px;border-radius:18px}
+
+  .kpi-mini-row{gap:8px;margin-bottom:12px}
+  .kpi-mini{padding:9px 6px;border-radius:11px}
+  .kpi-mini .v{font-size:1.7rem}
+  .kpi-mini .l{font-size:.65rem;margin-top:3px;letter-spacing:.5px}
+
+  .gauges-row{gap:14px;margin-bottom:12px}
+  .gauge-wrap{padding:10px 8px 8px;border-radius:14px}
+  .gauge-label-top{font-size:.92rem;letter-spacing:1.6px;margin-bottom:4px}
+  .gauge-svg{max-width:200px}
+  .gauge-readout{margin-top:-4px}
+  .gauge-value{font-size:1.7rem}
+  .gauge-unit{font-size:.72rem;margin-top:2px}
+
+  .route-450{padding:12px 18px;margin-bottom:12px;border-radius:14px}
+  .route-450-title{font-size:.88rem;letter-spacing:1.5px;margin-bottom:14px}
+  .route-450-labels{height:24px;margin-bottom:6px}
+  .rl-tick{font-size:.72rem}
+  .rl-milestone{font-size:.82rem;padding:3px 10px}
+  .route-450-track{height:30px;border-radius:50px}
+  .route-car{font-size:2.4rem;top:-14px}
+  .route-car-label{font-size:.78rem;padding:3px 9px;border-radius:6px;margin-bottom:6px}
+  .route-finish{font-size:1.3rem;top:-25px}
+  .route-ends{font-size:.78rem;margin-top:8px}
+
+  .input-section{padding:10px 12px;border-radius:12px}
+  .input-title{font-size:.78rem;letter-spacing:1.2px;margin-bottom:7px}
+  .input-section .bsm{padding:8px 12px;font-size:1.05rem;border-radius:8px}
+  .input-section input{padding:8px 5px;font-size:1.1rem;border-radius:8px}
+  .btn-save{padding:9px;font-size:.78rem;border-radius:9px;margin-top:8px;letter-spacing:.9px}
+
+  .regulateur{padding:14px 18px;margin-bottom:12px;border-radius:18px}
+  .reg-head{margin-bottom:10px;margin-top:6px;gap:12px}
+  .reg-icon{width:46px;height:46px;font-size:1.5rem}
+  .reg-title{font-size:1.15rem;letter-spacing:1.4px}
+  .reg-sub{font-size:.78rem;margin-top:2px}
+  .bp-grid{grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:4px;margin-bottom:8px}
+  .bpd{height:42px;border-radius:6px}
+  .bpd .num{font-size:.78rem}
+  .bpd .ic{font-size:.78rem}
+  .legend{font-size:.7rem;gap:10px}
+  .legend .dot{width:11px;height:11px}
+
+  .sec{font-size:1.1rem;letter-spacing:1.5px;margin-bottom:10px;margin-top:4px}
+  .totals{gap:10px;margin-bottom:14px}
+  .tb{padding:11px 6px;border-radius:13px}
+  .tb .tn{font-size:1.7rem}
+  .tb .tl{font-size:.68rem;margin-top:3px}
+
+  .trophies-bar,.tickets-bar{padding:10px 16px;border-radius:14px;margin-bottom:10px;gap:10px}
+  .tb-title{font-size:1rem;letter-spacing:1.4px}
+  .ticket-won,.trophy-item{padding:5px 12px;font-size:.78rem;border-radius:9px}
+
+  .btn-row{gap:10px;margin-bottom:14px}
+  .btn-row button{padding:10px 22px;font-size:.82rem;letter-spacing:1px}
+
+  .plateau-section{padding:18px 14px 22px;border-radius:22px;margin-bottom:14px}
+  .plateau-title{font-size:1.5rem;letter-spacing:3px;margin-bottom:6px}
+  .plateau-sub{font-size:.85rem;margin-bottom:14px}
+  .plateau-svg{max-width:1000px}
+  .plateau-legend{font-size:.78rem;gap:14px;margin-top:14px;padding-top:14px}
+  .plateau-legend .dot{width:12px;height:12px}
+
+  /* Cartes 1000 bornes — taille modérée */
+  .bornes-card .bc-frame{width:155px;height:210px;border-width:5px;padding:11px;border-radius:12px}
+  .bornes-card .bc-corner{font-size:.78rem}
+  .bornes-card .bc-value{font-size:3.3rem;margin-top:30px}
+  .bornes-card.bc-rdv .bc-value{font-size:2.1rem;margin-top:38px}
+  .bornes-card.bc-coll .bc-value{font-size:2rem;margin-top:42px}
+  .bornes-card .bc-label{font-size:1.3rem;letter-spacing:3.5px;margin-top:3px}
+  .bornes-card .bc-icon-mid{font-size:2.4rem;margin-top:10px}
+  .bornes-card .bc-cta{font-size:.78rem;padding:5px 11px;margin-top:8px;border-radius:7px}
+
+  /* Modal */
+  .modal{max-width:460px;padding:24px}
+  .modal h3{font-size:1.25rem}
+  .mf label{font-size:.82rem}
+  .mf input{padding:11px;font-size:1.1rem}
+
+  /* Voiture héro plus grande */
+  .hero-car-svg{width:420px}
+}
+
+/* ===== GRAND ÉCRAN ≥ 1400px — petit boost ===== */
+@media (min-width:1400px){
+  .gauge-svg{max-width:230px}
+  .gauge-value{font-size:1.9rem}
+  .kpi-mini .v{font-size:2rem}
+  .bp-grid{grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:5px}
+  .bpd{height:50px}
+  .bpd .num{font-size:.9rem}
+  .tb .tn{font-size:2rem}
+  .hero-car-svg{width:480px}
+  .route-car{font-size:2.9rem;top:-17px}
+}
+
+/* ===== MOBILE ===== */
 @media (max-width:600px){
   body{padding:10px}
   .kpi-mini-row{grid-template-columns:repeat(2,1fr)}
@@ -227,6 +338,198 @@ h1 .accent{color:#d63031}
 </style>
 </head>
 <body>
+
+<div class="hero-car">
+  <svg class="hero-car-svg" viewBox="0 0 440 160" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#e74c3c"/>
+        <stop offset="1" stop-color="#c0392b"/>
+      </linearGradient>
+      <linearGradient id="topGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity="0.95"/>
+        <stop offset="1" stop-color="#ecf0f1"/>
+      </linearGradient>
+      <radialGradient id="windowGrad" cx="0.3" cy="0.3" r="0.8">
+        <stop offset="0" stop-color="#a8d5f0"/>
+        <stop offset="1" stop-color="#5b9fc9"/>
+      </radialGradient>
+    </defs>
+
+    <!-- Ombre au sol -->
+    <ellipse cx="220" cy="148" rx="195" ry="5" fill="rgba(0,0,0,.2)"/>
+
+    <!-- ===== CARROSSERIE COMBI VW ===== -->
+    <!-- Partie haute blanche (toit) -->
+    <path d="M 50 50 Q 55 28 85 28 L 355 28 Q 395 28 410 60 L 410 78 L 50 78 Z" fill="url(#topGrad)" stroke="#1a1a2e" stroke-width="2.5"/>
+
+    <!-- Partie basse rouge (caisse) -->
+    <path d="M 35 78 L 415 78 Q 420 78 420 84 L 420 118 Q 420 124 414 124 L 28 124 Q 22 124 22 118 L 22 84 Q 22 78 35 78 Z" fill="url(#bodyGrad)" stroke="#1a1a2e" stroke-width="2.5"/>
+
+    <!-- Bandeau séparation chrome -->
+    <line x1="22" y1="78" x2="420" y2="78" stroke="#1a1a2e" stroke-width="2"/>
+    <line x1="24" y1="80" x2="418" y2="80" stroke="#fff" stroke-width="0.8" opacity="0.5"/>
+
+    <!-- ===== VITRES ARRONDIES ===== -->
+    <!-- Pare-brise droit (avant) -->
+    <path d="M 360 40 Q 380 40 392 56 L 405 72 L 360 72 Z" fill="url(#windowGrad)" stroke="#1a1a2e" stroke-width="1.5"/>
+    <!-- Vitre conducteur -->
+    <rect x="298" y="40" width="55" height="32" rx="6" fill="url(#windowGrad)" stroke="#1a1a2e" stroke-width="1.5"/>
+    <!-- Vitre milieu -->
+    <rect x="232" y="40" width="60" height="32" rx="6" fill="url(#windowGrad)" stroke="#1a1a2e" stroke-width="1.5"/>
+    <!-- Vitre arrière -->
+    <rect x="166" y="40" width="60" height="32" rx="6" fill="url(#windowGrad)" stroke="#1a1a2e" stroke-width="1.5"/>
+    <!-- Vitre derrière (petite) -->
+    <rect x="100" y="40" width="60" height="32" rx="6" fill="url(#windowGrad)" stroke="#1a1a2e" stroke-width="1.5"/>
+    <!-- Vitre coffre arrière (gauche) -->
+    <path d="M 60 40 L 94 40 L 94 72 L 56 72 Q 56 50 60 40 Z" fill="url(#windowGrad)" stroke="#1a1a2e" stroke-width="1.5"/>
+
+    <!-- ===== DÉTAILS AVANT ===== -->
+    <!-- Phares -->
+    <ellipse cx="402" cy="98" rx="10" ry="8" fill="#fdcb6e" stroke="#1a1a2e" stroke-width="1.5"/>
+    <ellipse cx="402" cy="96" rx="5" ry="3" fill="#fff" opacity="0.7"/>
+    <!-- Calandre -->
+    <circle cx="385" cy="100" r="6" fill="#1a1a2e"/>
+    <text x="385" y="103" text-anchor="middle" font-family="Audiowide" font-size="6" fill="#f9ca24" font-weight="700">VW</text>
+    <!-- Pare-chocs avant -->
+    <rect x="378" y="118" width="40" height="6" rx="1" fill="#bdc3c7" stroke="#1a1a2e" stroke-width="1"/>
+
+    <!-- ===== DÉTAILS ARRIÈRE ===== -->
+    <!-- Plaque "450" -->
+    <rect x="32" y="100" width="38" height="14" rx="2" fill="#fff" stroke="#1a1a2e" stroke-width="1.2"/>
+    <text x="51" y="111" text-anchor="middle" font-family="Audiowide" font-size="9" fill="#1a1a2e" font-weight="700">450</text>
+    <!-- Pare-chocs arrière -->
+    <rect x="22" y="118" width="40" height="6" rx="1" fill="#bdc3c7" stroke="#1a1a2e" stroke-width="1"/>
+
+    <!-- ===== ROUES ===== -->
+    <g transform="translate(110,124)">
+      <circle r="20" fill="#1a1a2e"/>
+      <circle r="14" fill="#3a3a52"/>
+      <circle r="6" fill="#bdc3c7"/>
+      <circle r="2" fill="#1a1a2e"/>
+      <line x1="-12" y1="0" x2="12" y2="0" stroke="#bdc3c7" stroke-width="1.8"/>
+      <line x1="0" y1="-12" x2="0" y2="12" stroke="#bdc3c7" stroke-width="1.8"/>
+      <line x1="-9" y1="-9" x2="9" y2="9" stroke="#bdc3c7" stroke-width="1.5"/>
+      <line x1="-9" y1="9" x2="9" y2="-9" stroke="#bdc3c7" stroke-width="1.5"/>
+    </g>
+    <g transform="translate(340,124)">
+      <circle r="20" fill="#1a1a2e"/>
+      <circle r="14" fill="#3a3a52"/>
+      <circle r="6" fill="#bdc3c7"/>
+      <circle r="2" fill="#1a1a2e"/>
+      <line x1="-12" y1="0" x2="12" y2="0" stroke="#bdc3c7" stroke-width="1.8"/>
+      <line x1="0" y1="-12" x2="0" y2="12" stroke="#bdc3c7" stroke-width="1.8"/>
+      <line x1="-9" y1="-9" x2="9" y2="9" stroke="#bdc3c7" stroke-width="1.5"/>
+      <line x1="-9" y1="9" x2="9" y2="-9" stroke="#bdc3c7" stroke-width="1.5"/>
+    </g>
+
+    <!-- ===== 5 PERSONNAGES dans les vitres ===== -->
+    <!-- Style flat illustration : tête + cou + épaule -->
+    <!-- Position des centres de tête : 75 (coffre), 130, 196, 262, 328 (avant) -->
+
+    <!-- TÊTE 1 : brune cheveux longs foncés (passagère arrière gauche) -->
+    <g transform="translate(75,60)">
+      <!-- Épaules -->
+      <path d="M -14 14 Q -14 8 -7 7 L 7 7 Q 14 8 14 14 L 14 16 L -14 16 Z" fill="#6c5ce7"/>
+      <!-- Cou -->
+      <rect x="-3.5" y="3" width="7" height="6" fill="#f4c8a8"/>
+      <!-- Cheveux longs derrière -->
+      <path d="M -11 -3 Q -11 -14 0 -14 Q 11 -14 11 -3 L 12 8 Q 11 13 9 14 L 5 14 Q 9 9 9 -1 L -9 -1 Q -9 9 -5 14 L -9 14 Q -11 13 -12 8 Z" fill="#2c1810"/>
+      <!-- Visage -->
+      <ellipse cx="0" cy="0" rx="9.5" ry="11" fill="#f4c8a8" stroke="#1a1a2e" stroke-width="0.7"/>
+      <!-- Frange -->
+      <path d="M -9 -4 Q -5 -8 0 -7 Q 5 -8 9 -4 Q 6 -2 0 -2 Q -6 -2 -9 -4 Z" fill="#2c1810"/>
+      <!-- Yeux -->
+      <circle cx="-3.5" cy="1" r="1.1" fill="#1a1a2e"/>
+      <circle cx="3.5" cy="1" r="1.1" fill="#1a1a2e"/>
+      <!-- Sourire -->
+      <path d="M -2.5 5 Q 0 7 2.5 5" stroke="#1a1a2e" stroke-width="1" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- TÊTE 2 : brune cheveux clairs (châtain) -->
+    <g transform="translate(130,60)">
+      <path d="M -14 14 Q -14 8 -7 7 L 7 7 Q 14 8 14 14 L 14 16 L -14 16 Z" fill="#fd79a8"/>
+      <rect x="-3.5" y="3" width="7" height="6" fill="#f4c8a8"/>
+      <path d="M -11 -3 Q -11 -14 0 -14 Q 11 -14 11 -3 L 11 7 Q 10 9 8 9 L 4 9 Q 8 5 8 -1 L -8 -1 Q -8 5 -4 9 L -8 9 Q -10 9 -11 7 Z" fill="#a87340"/>
+      <ellipse cx="0" cy="0" rx="9.5" ry="11" fill="#f4c8a8" stroke="#1a1a2e" stroke-width="0.7"/>
+      <!-- Frange côté -->
+      <path d="M -9 -4 Q -3 -7 6 -6 Q 9 -5 9 -3 Q 4 -1 -3 -1 Q -8 -1 -9 -4 Z" fill="#a87340"/>
+      <circle cx="-3.5" cy="1" r="1.1" fill="#1a1a2e"/>
+      <circle cx="3.5" cy="1" r="1.1" fill="#1a1a2e"/>
+      <path d="M -2.5 5 Q 0 7 2.5 5" stroke="#1a1a2e" stroke-width="1" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- TÊTE 3 : brune foncée -->
+    <g transform="translate(196,60)">
+      <path d="M -14 14 Q -14 8 -7 7 L 7 7 Q 14 8 14 14 L 14 16 L -14 16 Z" fill="#00b894"/>
+      <rect x="-3.5" y="3" width="7" height="6" fill="#f4c8a8"/>
+      <!-- Cheveux longs ondulés -->
+      <path d="M -11 -3 Q -11 -14 0 -14 Q 11 -14 11 -3 L 12 9 Q 12 14 10 15 L 7 15 Q 9 8 9 -1 L -9 -1 Q -9 8 -7 15 L -10 15 Q -12 14 -12 9 Z" fill="#3a2418"/>
+      <ellipse cx="0" cy="0" rx="9.5" ry="11" fill="#f4c8a8" stroke="#1a1a2e" stroke-width="0.7"/>
+      <!-- Raie au milieu -->
+      <path d="M 0 -8 L 0 -2" stroke="#1a1a2e" stroke-width="0.5" opacity="0.4"/>
+      <path d="M -9 -3 Q -3 -8 0 -8 Q 3 -8 9 -3 Q 5 -2 0 -2 Q -5 -2 -9 -3 Z" fill="#3a2418"/>
+      <circle cx="-3.5" cy="1" r="1.1" fill="#1a1a2e"/>
+      <circle cx="3.5" cy="1" r="1.1" fill="#1a1a2e"/>
+      <path d="M -2.5 5 Q 0 7 2.5 5" stroke="#1a1a2e" stroke-width="1" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- TÊTE 4 : blonde à lunettes -->
+    <g transform="translate(262,60)">
+      <path d="M -14 14 Q -14 8 -7 7 L 7 7 Q 14 8 14 14 L 14 16 L -14 16 Z" fill="#fdcb6e"/>
+      <rect x="-3.5" y="3" width="7" height="6" fill="#f4c8a8"/>
+      <!-- Cheveux blonds mi-longs avec frange -->
+      <path d="M -11 -3 Q -11 -14 0 -14 Q 11 -14 11 -3 L 11 6 Q 10 8 8 8 L 5 8 Q 8 4 8 -1 L -8 -1 Q -8 4 -5 8 L -8 8 Q -10 8 -11 6 Z" fill="#e8c785"/>
+      <ellipse cx="0" cy="0" rx="9.5" ry="11" fill="#f4c8a8" stroke="#1a1a2e" stroke-width="0.7"/>
+      <!-- Frange côté -->
+      <path d="M -9 -4 Q -2 -8 9 -3 Q 6 -1 0 -1 Q -7 -1 -9 -4 Z" fill="#d4af6a"/>
+      <!-- Lunettes rondes -->
+      <circle cx="-4" cy="1.5" r="3.2" fill="#fff" opacity="0.4" stroke="#1a1a2e" stroke-width="1.2"/>
+      <circle cx="4" cy="1.5" r="3.2" fill="#fff" opacity="0.4" stroke="#1a1a2e" stroke-width="1.2"/>
+      <line x1="-1" y1="1.5" x2="1" y2="1.5" stroke="#1a1a2e" stroke-width="1"/>
+      <!-- Branches -->
+      <line x1="7" y1="1" x2="9.5" y2="0" stroke="#1a1a2e" stroke-width="1"/>
+      <line x1="-7" y1="1" x2="-9.5" y2="0" stroke="#1a1a2e" stroke-width="1"/>
+      <!-- Yeux derrière les lunettes -->
+      <circle cx="-4" cy="1.5" r="0.7" fill="#1a1a2e"/>
+      <circle cx="4" cy="1.5" r="0.7" fill="#1a1a2e"/>
+      <path d="M -2.5 6 Q 0 8 2.5 6" stroke="#1a1a2e" stroke-width="1" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- TÊTE 5 : brun à lunettes + barbe de 3 jours (conducteur) -->
+    <g transform="translate(328,60)">
+      <path d="M -14 14 Q -14 8 -7 7 L 7 7 Q 14 8 14 14 L 14 16 L -14 16 Z" fill="#0984e3"/>
+      <rect x="-3.5" y="3" width="7" height="6" fill="#f4c8a8"/>
+      <!-- Visage -->
+      <ellipse cx="0" cy="0" rx="9.5" ry="11" fill="#f4c8a8" stroke="#1a1a2e" stroke-width="0.7"/>
+      <!-- Barbe 3 jours (zone bleutée hachurée sur le bas) -->
+      <path d="M -8.5 4 Q -8 9 -3 11 L 3 11 Q 8 9 8.5 4 Q 7 8 0 8 Q -7 8 -8.5 4 Z" fill="#3a4858" opacity="0.5"/>
+      <!-- Petits points pour la texture barbe -->
+      <circle cx="-5" cy="6" r="0.4" fill="#1a1a2e" opacity="0.6"/>
+      <circle cx="-3" cy="7.5" r="0.4" fill="#1a1a2e" opacity="0.6"/>
+      <circle cx="0" cy="8" r="0.4" fill="#1a1a2e" opacity="0.6"/>
+      <circle cx="3" cy="7.5" r="0.4" fill="#1a1a2e" opacity="0.6"/>
+      <circle cx="5" cy="6" r="0.4" fill="#1a1a2e" opacity="0.6"/>
+      <!-- Cheveux courts bruns -->
+      <path d="M -11 -3 Q -11 -13 0 -13 Q 11 -13 11 -3 L 11 -1 Q 8 -4 0 -4 Q -8 -4 -11 -1 Z" fill="#2c1810"/>
+      <!-- Mèche frontale -->
+      <path d="M -6 -7 Q -2 -10 4 -8 Q 6 -5 0 -3 Q -5 -3 -6 -7 Z" fill="#2c1810"/>
+      <!-- Lunettes carrées -->
+      <rect x="-7" y="-2" width="6" height="6" rx="1" fill="#fff" opacity="0.4" stroke="#1a1a2e" stroke-width="1.2"/>
+      <rect x="1" y="-2" width="6" height="6" rx="1" fill="#fff" opacity="0.4" stroke="#1a1a2e" stroke-width="1.2"/>
+      <line x1="-1" y1="1" x2="1" y2="1" stroke="#1a1a2e" stroke-width="1"/>
+      <!-- Branches -->
+      <line x1="7" y1="1" x2="9.5" y2="0" stroke="#1a1a2e" stroke-width="1"/>
+      <line x1="-7" y1="1" x2="-9.5" y2="0" stroke="#1a1a2e" stroke-width="1"/>
+      <!-- Yeux -->
+      <circle cx="-4" cy="1" r="0.7" fill="#1a1a2e"/>
+      <circle cx="4" cy="1" r="0.7" fill="#1a1a2e"/>
+    </g>
+
+    <!-- Mains du conducteur sur le volant (petit détail mignon) -->
+    <circle cx="328" cy="78" r="2.5" fill="#f4c8a8" stroke="#1a1a2e" stroke-width="0.5"/>
+  </svg>
+</div>
 
 <h1>LE <span class="accent">450 BORNES</span></h1>
 <p class="subtitle">Mai 2026 · Paris → Saint-Malo · 1 vente = 1 borne</p>
@@ -251,7 +554,7 @@ h1 .accent{color:#d63031}
 
     <div class="gauges-row">
       <div class="gauge-wrap" id="regWrap">
-        <div class="gauge-label-top">🚦 RÉGULATEUR</div>
+        <div class="gauge-label-top">🚦 RÉGULATEUR DE VITESSE</div>
         <svg class="gauge-svg" viewBox="0 0 200 200">
           <circle cx="100" cy="100" r="95" fill="#0f0f1e"/>
           <circle cx="100" cy="100" r="92" fill="none" stroke="#444" stroke-width="2"/>
@@ -843,7 +1146,12 @@ function dayStateLabel(i){
   var ti=todayIdx(),s=S.sal[i],a=assess(i);
   var d=new Date(YEAR,MONTH,i+1);
   if(WORKED[i]===0){
-    if(d.getDay()===0) return '';
+    if(d.getDay()===0) return ''; // dimanche : rien
+    // Jour férié STOP : afficher ventes/obj même si saisis
+    if(s!==null){
+      if(a.o>0) return a.s+'v / '+a.o+' 🛑';
+      return a.s+'v 🛑';
+    }
     return '🛑 STOP';
   }
   if(i===ti) return s!==null?(a.s+'v · EN COURS'):'EN COURS';
@@ -851,14 +1159,14 @@ function dayStateLabel(i){
   if(s===null) return '';
   // Joué
   if(WORKED[i]===2){
-    if(a.objOk) return a.s+'v ✅';
-    if(a.o>0) return a.s+'v '+Math.round(a.cumul/a.o*100)+'%';
+    if(a.objOk) return a.s+'v / '+a.o+' ✅';
+    if(a.o>0) return a.s+'v / '+a.o;
     return a.s+'v';
   }
-  if(S.jokers[i]) return a.s+'v 🔧';
-  if(a.boostOk) return a.s+'v ⚡';
-  if(a.objOk) return a.s+'v ✅';
-  if(a.o>0) return a.s+'v '+Math.round(a.cumul/a.o*100)+'%';
+  if(S.jokers[i]) return a.s+'v / '+a.o+' 🔧';
+  if(a.boostOk) return a.s+'v / '+a.o+' ⚡';
+  if(a.objOk) return a.s+'v / '+a.o+' ✅';
+  if(a.o>0) return a.s+'v / '+a.o;
   return a.s+'v';
 }
 
@@ -935,10 +1243,10 @@ function renderPlateau(){
   car.setAttribute('class','car-today');
   var cText=document.createElementNS('http://www.w3.org/2000/svg','text');
   cText.setAttribute('x',tRect.cx);
-  cText.setAttribute('y',tRect.y-25);
+  cText.setAttribute('y',tRect.y-28);
   cText.setAttribute('text-anchor','middle');
-  cText.setAttribute('font-size','22');
-  cText.setAttribute('filter','drop-shadow(0 3px 4px rgba(0,0,0,0.4))');
+  cText.setAttribute('font-size','34');
+  cText.setAttribute('filter','drop-shadow(0 4px 6px rgba(0,0,0,0.5))');
   cText.textContent='🚗';
   car.appendChild(cText);
   carG.appendChild(car);
