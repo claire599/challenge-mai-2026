@@ -494,29 +494,29 @@ body.ios .route-car-emoji{transform:scaleX(-1)}
       <path d="M -2.5 5 Q 0 7 2.5 5" stroke="#1a1a2e" stroke-width="1" fill="none" stroke-linecap="round"/>
     </g>
 
-    <!-- TÊTE 4 : blonde cheveux longs à lunettes rectangulaires -->
+    <!-- TÊTE 4 : blonde cheveux longs (mèches latérales) à lunettes rectangulaires -->
     <g transform="translate(262,60)">
       <!-- T-shirt jaune -->
       <path d="M -14 14 Q -14 8 -7 7 L 7 7 Q 14 8 14 14 L 14 16 L -14 16 Z" fill="#fdcb6e"/>
       <!-- Cou -->
       <rect x="-3.5" y="3" width="7" height="6" fill="#f4c8a8"/>
-      <!-- Cheveux longs blonds derrière (qui descendent sur les épaules) -->
-      <path d="M -11 -3 Q -11 -14 0 -14 Q 11 -14 11 -3 L 13 10 Q 13 14 11 15 L 7 15 Q 9 8 9 -1 L -9 -1 Q -9 8 -7 15 L -11 15 Q -13 14 -13 10 Z" fill="#f0d28b"/>
       <!-- Visage -->
       <ellipse cx="0" cy="0" rx="9" ry="10.5" fill="#f4c8a8" stroke="#1a1a2e" stroke-width="0.7"/>
-      <!-- Mèches qui encadrent le visage -->
-      <path d="M -11 -3 Q -10 4 -8 9 Q -10 9 -11 7 Z" fill="#f0d28b"/>
-      <path d="M 11 -3 Q 10 4 8 9 Q 10 9 11 7 Z" fill="#f0d28b"/>
-      <!-- Mèche frontale qui tombe sur le côté -->
-      <path d="M -8 -6 Q -2 -9 7 -5 Q 8 -3 5 -2 Q 1 -1 -3 -1 Q -7 -1 -8 -6 Z" fill="#e8c478"/>
-      <!-- Lunettes RECTANGULAIRES -->
-      <rect x="-7.5" y="-1" width="6.5" height="4.5" rx="0.8" fill="rgba(255,255,255,0.2)" stroke="#1a1a2e" stroke-width="1"/>
-      <rect x="1" y="-1" width="6.5" height="4.5" rx="0.8" fill="rgba(255,255,255,0.2)" stroke="#1a1a2e" stroke-width="1"/>
+      <!-- Cheveux longs : mèches qui descendent sur les côtés du visage (visibles dans la fenêtre) -->
+      <path d="M -10 -4 Q -11 0 -11 5 Q -11 9 -9 11 L -7 11 Q -8.5 8 -8.5 4 Q -8.5 -1 -10 -4 Z" fill="#f0d28b" stroke="#1a1a2e" stroke-width="0.5"/>
+      <path d="M 10 -4 Q 11 0 11 5 Q 11 9 9 11 L 7 11 Q 8.5 8 8.5 4 Q 8.5 -1 10 -4 Z" fill="#f0d28b" stroke="#1a1a2e" stroke-width="0.5"/>
+      <!-- Sommet de la tête : juste une bande de cheveux qui suit le crâne, pas de gros bandeau -->
+      <path d="M -9 -5 Q -10 -11 0 -12 Q 10 -11 9 -5 Q 7 -7 4 -7 Q 2 -5 0 -5 Q -2 -5 -4 -7 Q -7 -7 -9 -5 Z" fill="#f0d28b" stroke="#1a1a2e" stroke-width="0.5"/>
+      <!-- Mèche latérale fine qui retombe sur le front (côté droit) -->
+      <path d="M 1 -7 Q 5 -9 8 -6 Q 7 -3 3 -2.5 Q 1 -3 1 -7 Z" fill="#e8c478" stroke="#1a1a2e" stroke-width="0.4"/>
+      <!-- Lunettes RECTANGULAIRES bien visibles -->
+      <rect x="-7.5" y="-1" width="6.5" height="4.5" rx="0.8" fill="rgba(255,255,255,0.2)" stroke="#1a1a2e" stroke-width="1.2"/>
+      <rect x="1" y="-1" width="6.5" height="4.5" rx="0.8" fill="rgba(255,255,255,0.2)" stroke="#1a1a2e" stroke-width="1.2"/>
       <!-- Pont central -->
-      <line x1="-1" y1="1" x2="1" y2="1" stroke="#1a1a2e" stroke-width="0.9"/>
+      <line x1="-1" y1="1" x2="1" y2="1" stroke="#1a1a2e" stroke-width="1"/>
       <!-- Branches -->
-      <line x1="7.5" y1="0.5" x2="9.5" y2="-0.2" stroke="#1a1a2e" stroke-width="0.9"/>
-      <line x1="-7.5" y1="0.5" x2="-9.5" y2="-0.2" stroke="#1a1a2e" stroke-width="0.9"/>
+      <line x1="7.5" y1="0.5" x2="9" y2="0" stroke="#1a1a2e" stroke-width="1"/>
+      <line x1="-7.5" y1="0.5" x2="-9" y2="0" stroke="#1a1a2e" stroke-width="1"/>
       <!-- Yeux derrière les lunettes -->
       <circle cx="-4.2" cy="1.3" r="0.8" fill="#1a1a2e"/>
       <circle cx="4.2" cy="1.3" r="0.8" fill="#1a1a2e"/>
@@ -863,7 +863,7 @@ var DAYS_FULL=['DIM','LUN','MAR','MER','JEU','VEN','SAM'];
 var WORKED=[0,2,0,1,1,1,1,0,2,0,1,1,1,0,1,2,0,1,1,1,1,1,2,0,1,1,1,1,1,2,0];
 
 // ===== BONS =====
-// Bons individuels ventes (13) : 9 station-service + 4 stations spéciales
+// Bons individuels ventes (14) : 9 station-service + 4 stations spéciales + ticket à gratter
 var INDIV_PRIZES=[
   {icon:'🌮',label:'Halte gourmande (15€) !'},
   {icon:'📸',label:'20 photos imprimées !'},
@@ -877,7 +877,8 @@ var INDIV_PRIZES=[
   {icon:'⛽',label:'Café & viennoiserie !'},
   {icon:'🍫',label:'Barre choco voyage !'},
   {icon:'🥤',label:'Boisson fraîche !'},
-  {icon:'🍿',label:'Pop-corn cinéma !'}
+  {icon:'🍿',label:'Pop-corn cinéma !'},
+  {icon:'🍀',label:'Ticket jeu à gratter !'}
 ];
 
 // Bons collectifs (2 cas exceptionnels uniquement)
