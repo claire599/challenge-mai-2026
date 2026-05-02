@@ -101,6 +101,8 @@ h1 .accent{color:#d63031}
 .route-tick-mark{position:absolute;top:-5px;bottom:-5px;width:2px;background:rgba(255,255,255,.4)}
 .route-tick-mark.milestone{width:4px;background:#f9ca24;box-shadow:0 0 12px rgba(249,202,36,.7);top:-8px;bottom:-8px;border-radius:2px}
 .route-car{position:absolute;top:-14px;left:0%;transform:translateX(-50%);font-size:2rem;filter:drop-shadow(0 4px 6px rgba(0,206,201,.6));animation:carPulse 1.4s ease-in-out infinite;z-index:5;transition:left .8s cubic-bezier(.34,1.56,.64,1)}
+.route-car-emoji{display:inline-block}
+body.ios .route-car-emoji{transform:scaleX(-1)}
 .route-car-label{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:4px;background:#1a1a2e;color:#f9ca24;font-family:'Audiowide',sans-serif;font-size:.6rem;padding:2px 6px;border-radius:5px;border:1.5px solid #f9ca24;white-space:nowrap;line-height:1.2;box-shadow:0 2px 6px rgba(0,0,0,.4)}
 .route-car-label::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#f9ca24}
 @keyframes carPulse{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-3px)}}
@@ -683,7 +685,7 @@ h1 .accent{color:#d63031}
         <div class="route-tick-mark milestone" style="left:44.44%"></div>
         <div class="route-tick-mark" style="left:66.67%"></div>
         <div class="route-tick-mark" style="left:88.89%"></div>
-        <div class="route-car" id="routeCar"><span class="route-car-label" id="routeCarLabel">0 bornes</span>🚗</div>
+        <div class="route-car" id="routeCar"><span class="route-car-label" id="routeCarLabel">0 bornes</span><span class="route-car-emoji">🚗</span></div>
         <div class="route-finish">🏁</div>
       </div>
       <div class="route-ends">
@@ -836,7 +838,7 @@ h1 .accent{color:#d63031}
 <script>
 // ===== CONFIG JSONBin =====
 var BIN_ID  = '69f4cde9856a682189957a4e';
-var API_KEY = '$2a$10$Dj63Oq4EoircmvT4pyVBxu/UN/09TFt9i9aMZGL3NlOD/dHYMrSm.';
+var API_KEY = '$2a$10$j.EvQYa3TiVfgAxZJWVcPeMvrKUWQ83egNT9ugRIUkk.HacoWpioe';
 var BIN_URL = 'https://api.jsonbin.io/v3/b/'+BIN_ID;
 var HEADERS = {'Content-Type':'application/json','X-Master-Key':API_KEY,'X-Bin-Versioning':'false'};
 
@@ -929,13 +931,15 @@ function objMonth(){
 // ===== SYNC =====
 function loadShared(){
   return fetch(BIN_URL,{headers:{'X-Master-Key':API_KEY}})
-  .then(function(r){return r.json();})
+  .then(function(r){
+    if(!r.ok){throw new Error('GET HTTP '+r.status+' '+r.statusText);}
+    return r.json();
+  })
   .then(function(j){
     var p=j.record||j;
     if(Array.isArray(p.obj)&&p.obj.length===N_DAYS) S.obj=p.obj;
     if(Array.isArray(p.rep)&&p.rep.length===N_DAYS) S.rep=p.rep;
     if(Array.isArray(p.sal)&&p.sal.length===N_DAYS){
-      // Anti-régression : ne réécraser que si valeur valide
       for(var i=0;i<N_DAYS;i++){if(p.sal[i]!==null&&p.sal[i]!==undefined) S.sal[i]=p.sal[i];}
     }
     if(Array.isArray(p.rdv)&&p.rdv.length===N_DAYS){
@@ -948,7 +952,6 @@ function loadShared(){
     if(Array.isArray(p.trophies)) S.trophies=p.trophies;
     if(typeof p.jalon200Done==='boolean') S.jalon200Done=p.jalon200Done;
     var ti=todayIdx(),todayStr=todayKey();
-    // Réinit jalons si jour différent
     if(S.milestones&&(S.milestones.day!==ti||!S.milestones.m1||!S.milestones.m2)) S.milestones=null;
     wonTickets=S.wonTickets.filter(function(t){return t.day===todayStr;});
     updateTicketsBar();
@@ -965,14 +968,28 @@ function loadShared(){
       for(var i=0;i<toPlay.length;i++) playEvent(toPlay[i]);
     }
   })
-  .catch(function(e){sync('⚠️ Erreur : '+e.message,'#d63031');});
+  .catch(function(e){
+    console.error('LOAD ERROR:',e);
+    sync('⚠️ Lecture : '+e.message,'#d63031');
+  });
 }
 
 function saveShared(){
   if(S.events&&S.events.length>30) S.events=S.events.slice(-30);
   return fetch(BIN_URL,{method:'PUT',headers:HEADERS,body:JSON.stringify(S)})
+  .then(function(r){
+    if(!r.ok){
+      return r.text().then(function(body){
+        throw new Error('PUT HTTP '+r.status+' — '+body.substring(0,150));
+      });
+    }
+    return r.json();
+  })
   .then(function(){sync('✅ Synchronisé · '+now());})
-  .catch(function(){sync('⚠️ Erreur sync','#d63031');});
+  .catch(function(e){
+    console.error('SAVE ERROR:',e);
+    sync('⚠️ ÉCHEC SAUVEGARDE : '+e.message,'#d63031');
+  });
 }
 
 function pushEvent(type,data){if(!S.events) S.events=[];S.events.push({type:type,data:data||{},ts:Date.now()});}
@@ -1295,6 +1312,10 @@ function renderPlateau(){
   cText.setAttribute('text-anchor','middle');
   cText.setAttribute('font-size','34');
   cText.setAttribute('filter','drop-shadow(0 4px 6px rgba(0,0,0,0.5))');
+  // Mirror horizontal sur iOS pour orienter la voiture vers la droite
+  if(document.body.classList.contains('ios')){
+    cText.setAttribute('transform','translate('+(2*tRect.cx)+',0) scale(-1,1)');
+  }
   cText.textContent='🚗';
   car.appendChild(cText);
   carG.appendChild(car);
@@ -1959,6 +1980,10 @@ document.getElementById('modalBg').onclick=function(e){if(e.target===document.ge
 
 // ===== INIT =====
 function init(){
+  // Détection iOS pour orienter les emojis voiture (🚗 pointe à gauche sur iOS)
+  if(/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream){
+    document.body.classList.add('ios');
+  }
   loadShared().then(function(){
     document.getElementById('app').style.display='block';
     var ti=todayIdx();
