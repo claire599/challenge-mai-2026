@@ -1281,22 +1281,23 @@ function renderPlateau(){
     t2.setAttribute('font-family','Audiowide');t2.setAttribute('font-size',numFs);t2.setAttribute('fill',col);
     if(i>todayIdx())t2.setAttribute('opacity','0.6');
     t2.textContent=(i+1);labelsG.appendChild(t2);
-    // Etat (ventes / obj) — texte jaune avec contour noir fin
+    // Etat (ventes / obj) — Outfit gras, taille raisonnable, contour très fin
     if(stateTxt){
-      var stateFs=rect.row===4?11:12;
+      var stateFs=rect.row===4?9:10;
       var cellColor=dayCellColor(i);
       var isYellowCell = (cellColor === '#f9ca24');
       var tEt=document.createElementNS('http://www.w3.org/2000/svg','text');
       tEt.setAttribute('x',rect.cx);
       tEt.setAttribute('y',yState);
+      tEt.setAttribute('font-family','Outfit, sans-serif');
       tEt.setAttribute('font-size',stateFs);
-      tEt.setAttribute('font-weight','900');
+      tEt.setAttribute('font-weight','800');
       if(isYellowCell){
         tEt.setAttribute('fill','#1a1a2e');
       }else{
         tEt.setAttribute('fill','#f9ca24');
         tEt.setAttribute('stroke','#1a1a2e');
-        tEt.setAttribute('stroke-width','0.6');
+        tEt.setAttribute('stroke-width','0.4');
         tEt.setAttribute('paint-order','stroke fill');
       }
       tEt.textContent=stateTxt;labelsG.appendChild(tEt);
@@ -1325,23 +1326,21 @@ function renderPlateau(){
 function adjSal(v){var el=document.getElementById('iSal');el.value=Math.max(0,(parseInt(el.value)||0)+v);}
 function adjRdv(v){var el=document.getElementById('iRdv');el.value=Math.max(0,(parseInt(el.value)||0)+v);}
 
-// ===== SAVE RDV (optimiste) =====
+// ===== SAVE RDV (optimiste — UI instantanée) =====
 function saveRdv(){
   var ti=todayIdx();
   var rdv=parseInt(document.getElementById('iRdv').value);
   if(isNaN(rdv)||rdv<0){showToast('❌ Valeur invalide');return;}
   var prevLocal=S.rdv[ti]||0;
   if(rdv<prevLocal){showToast('⚠️ Anti-régression : '+prevLocal+' RDV déjà saisis');document.getElementById('iRdv').value=prevLocal;return;}
-  var btn=document.getElementById('btnSaveRdv');
-  if(btn){btn.disabled=true;btn.style.opacity='0.6';btn.textContent='⏳ Sync…';}
-  showToast('✅ Enregistré');
-  sync('⏳ Sync…','#7f8c8d');
 
-  // Application immédiate locale
+  // 1) Update local INSTANTANÉ
   S.rdv[ti]=rdv;
   render();
+  showToast('✅ Enregistré');
 
-  // Sync background
+  // 2) Sync EN ARRIÈRE-PLAN
+  sync('⏳ Sync…','#7f8c8d');
   loadShared().then(function(){
     var prev=S.rdv[ti]||0;
     if(prev>rdv){rdv=prev;document.getElementById('iRdv').value=prev;}
@@ -1360,15 +1359,11 @@ function saveRdv(){
       }
     }
     render();
-    saveShared().then(function(){
-      if(btn){btn.disabled=false;btn.style.opacity='1';btn.textContent='✓ Valider';}
-    }).catch(function(){
-      if(btn){btn.disabled=false;btn.style.opacity='1';btn.textContent='✓ Valider';}
-    });
+    saveShared();
   });
 }
 
-// ===== SAVE VENTES (optimiste — UI rapide) =====
+// ===== SAVE VENTES (optimiste — UI instantanée) =====
 function saveVentes(){
   var ti=todayIdx();
   if(WORKED[ti]===0){showToast('⛔ Pas de challenge aujourd\'hui !');return;}
@@ -1376,19 +1371,16 @@ function saveVentes(){
   if(isNaN(sal)||sal<0){showToast('❌ Indiquer les ventes');return;}
   var prevLocal=S.sal[ti]||0;
   if(prevLocal>0&&sal<prevLocal){showToast('⚠️ Anti-régression : '+prevLocal+' ventes déjà saisies');document.getElementById('iSal').value=prevLocal;return;}
-  // Désactiver le bouton + feedback visuel
-  var btn=document.getElementById('btnSaveVentes');
-  if(btn){btn.disabled=true;btn.style.opacity='0.6';btn.textContent='⏳ Sync…';}
-  showToast('✅ Enregistré');
-  sync('⏳ Sync…','#7f8c8d');
 
-  // Application immédiate locale (UI rapide)
+  // 1) Update local INSTANTANÉ + render
   S.sal[ti]=sal;
   render();
+  showToast('✅ Enregistré');
 
-  // Sync en background : loadShared → traitement → saveShared
+  // 2) Sync EN ARRIÈRE-PLAN (le bouton reste cliquable, pas de blocage UI)
+  sync('⏳ Sync…','#7f8c8d');
   loadShared().then(function(){
-    var prev=S.sal[ti]||0; // valeur partagée après reload
+    var prev=S.sal[ti]||0;
     if(prev>sal){sal=prev;document.getElementById('iSal').value=prev;}
     var added=sal-prev,rep=S.rep[ti]||0,obj=S.obj[ti]||0;
     var prevCumul=prev+rep,newCumul=sal+rep;
@@ -1397,8 +1389,6 @@ function saveVentes(){
     var todayStr=todayKey();
     S.sal[ti]=sal;
     if(!S.events) S.events=[];
-
-    // Init / réinit jalons secrets m1, m2
     if(!S.milestones||S.milestones.day!==ti||!S.milestones.m1||!S.milestones.m2){
       var mid=Math.max(1,Math.round(obj*0.5)),sc=rep;
       var m1=Math.round(sc+1+Math.random()*Math.max(0,mid-sc-2));
@@ -1411,12 +1401,9 @@ function saveVentes(){
         regulateurDone:prev>=MIN_BOOST,earlyBirdDone:false,turboDone:false,glaceComboDone:false,
         lastIndivIdx:-1,lastRdvIdx:-1};
     }
-
     render();
     if(added>0){for(var n=0;n<added;n++){(function(d){setTimeout(function(){spawnPlusOne(1);},d);})(n*150);}}
     var a=assess(ti);
-
-    // Jalons secrets m1, m2
     if(obj>0&&!S.milestones.m1done&&prevCumul<S.milestones.m1&&newCumul>=S.milestones.m1){
       S.milestones.m1done=true;var ts1=Date.now();var p1=randomIndivPrize();
       pushEvent('ticket',{prize:p1,ts:ts1});setTimeout(function(){spawnGoldenTicketForAll(p1,ts1);},400);
@@ -1425,12 +1412,10 @@ function saveVentes(){
       S.milestones.m2done=true;var ts2=Date.now()+1;var p2=randomIndivPrize();
       pushEvent('ticket',{prize:p2,ts:ts2});setTimeout(function(){spawnGoldenTicketForAll(p2,ts2);},600);
     }
-    // 50% Booster
     if(WORKED[ti]===1&&!prevBoostHalf&&sal>=8){
       pushEvent('floating',{icon:'⚡',label:'50% Régulateur !',size:'medium'});
       showFloatingIcon('⚡','50% Régulateur !','medium');
     }
-    // Régulateur déclenché
     if(WORKED[ti]===1&&a.boostOk&&!prevBoost){
       if(!S.milestones.regulateurDone){
         S.milestones.regulateurDone=true;
@@ -1440,7 +1425,6 @@ function saveVentes(){
         setTimeout(function(){spawnRegulateurAnim(p3,ts3);},600);
       }
     }
-    // 50% / 100% objectif
     if(obj>0&&!prevObjHalf&&newCumul>=Math.round(obj*0.5)){
       pushEvent('floating',{icon:'🎯',label:'50% Objectif !',size:'medium'});
       showFloatingIcon('🎯','50% Objectif !','medium');
@@ -1449,7 +1433,6 @@ function saveVentes(){
       pushEvent('objectifFlag',{});
       spawnObjectifFlag();
     }
-    // Early Bird
     if(!S.milestones.earlyBirdDone&&sal>=7&&(new Date().getHours()<14)){
       S.milestones.earlyBirdDone=true;var tseb=Date.now()+3;var pb=randomIndivPrize();
       pushEvent('earlybird',{prize:pb,ts:tseb});
@@ -1459,7 +1442,6 @@ function saveVentes(){
       addTrophy('🌅','Early Bird !',todayStr);
       if(S.milestones.turboDone&&!S.milestones.glaceComboDone) triggerGlaceCombo();
     }
-    // Turbo
     if(obj>0&&sal>=obj+5&&!S.milestones.turboDone){
       S.milestones.turboDone=true;var tst=Date.now()+4;var pt=randomIndivPrize();
       pushEvent('turbo',{prize:pt,ts:tst});
@@ -1467,7 +1449,6 @@ function saveVentes(){
       setTimeout(function(){spawnTurboAnim(pt,tst);addTrophy('🚀','Turbo !',todayStr);},400);
       if(S.milestones.earlyBirdDone&&!S.milestones.glaceComboDone) triggerGlaceCombo();
     }
-    // Jalon 200
     var prevCumulMonth=cumulMonth()-added;
     var newCumulMonth=cumulMonth();
     if(!S.jalon200Done&&prevCumulMonth<JALON_BORNES&&newCumulMonth>=JALON_BORNES){
@@ -1479,12 +1460,7 @@ function saveVentes(){
       setTimeout(function(){showCelebration('jalon200');},800);
       setTimeout(function(){spawnGoldenTicketForAll(COLLECTIF_RESTO,ts200);},2200);
     }
-
-    saveShared().then(function(){
-      if(btn){btn.disabled=false;btn.style.opacity='1';btn.textContent='✓ Valider';}
-    }).catch(function(){
-      if(btn){btn.disabled=false;btn.style.opacity='1';btn.textContent='✓ Valider';}
-    });
+    saveShared();
   });
 }
 
