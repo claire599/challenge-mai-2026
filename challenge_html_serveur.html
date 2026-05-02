@@ -101,8 +101,7 @@ h1 .accent{color:#d63031}
 .route-tick-mark{position:absolute;top:-5px;bottom:-5px;width:2px;background:rgba(255,255,255,.4)}
 .route-tick-mark.milestone{width:4px;background:#f9ca24;box-shadow:0 0 12px rgba(249,202,36,.7);top:-8px;bottom:-8px;border-radius:2px}
 .route-car{position:absolute;top:-22px;left:0%;transform:translateX(-50%);font-size:2rem;filter:drop-shadow(0 4px 6px rgba(0,206,201,.6));animation:carPulse 1.4s ease-in-out infinite;z-index:5;transition:left .8s cubic-bezier(.34,1.56,.64,1)}
-.route-car-emoji{display:inline-block}
-body.ios .route-car-emoji{transform:scaleX(-1)}
+.route-car-emoji{display:inline-block;transform:scaleX(-1)}
 .route-car-label{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:4px;background:#1a1a2e;color:#f9ca24;font-family:'Audiowide',sans-serif;font-size:.6rem;padding:2px 6px;border-radius:5px;border:1.5px solid #f9ca24;white-space:nowrap;line-height:1.2;box-shadow:0 2px 6px rgba(0,0,0,.4)}
 .route-car-label::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#f9ca24}
 @keyframes carPulse{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-3px)}}
@@ -170,6 +169,30 @@ body.ios .route-car-emoji{transform:scaleX(-1)}
 .plateau-section{background:#fff;border-radius:22px;padding:18px 14px 22px;margin-bottom:16px;box-shadow:0 8px 24px rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.05);overflow:hidden}
 .plateau-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2.5px;margin-bottom:4px;text-align:center;color:#1a1a2e}
 .plateau-sub{font-size:.72rem;color:#7f8c8d;text-align:center;margin-bottom:14px;font-weight:600}
+
+/* ===== GRILLE DE CARTES PLATEAU ===== */
+.plateau-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:7px;margin-bottom:14px}
+.dc{border-radius:13px;padding:7px 5px 8px;text-align:center;cursor:pointer;border:2px solid transparent;transition:transform .15s;position:relative;min-height:96px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+.dc:hover{transform:translateY(-2px)}
+.dc .dd{font-size:.55rem;font-weight:800;opacity:.7;text-transform:uppercase;letter-spacing:.4px;line-height:1}
+.dc .dn{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;line-height:1;letter-spacing:0;margin:1px 0 2px}
+.dc .dobj{font-size:.62rem;font-weight:700;opacity:.85;line-height:1.1}
+.dc .drep{font-size:.6rem;font-weight:700;line-height:1.1;color:#1a1a2e;background:rgba(249,202,36,.85);border-radius:8px;padding:1px 5px;margin-top:2px;display:inline-block}
+.dc .dres{font-family:'Audiowide',sans-serif;font-size:.78rem;line-height:1;margin-top:auto;padding-top:5px;letter-spacing:.5px}
+.dc .dbadge{position:absolute;top:3px;right:5px;font-size:.85rem;line-height:1}
+.dc-ok{background:linear-gradient(135deg,#00b894,#55efc4);color:#1a1a2e}
+.dc-min{background:linear-gradient(135deg,#fdcb6e,#e17055);color:#1a1a2e}
+.dc-fail{background:linear-gradient(135deg,#d63031,#e17055);color:#fff}
+.dc-today{background:linear-gradient(135deg,#1a1a2e,#3a3a5e);color:#fff;border-color:#f9ca24;box-shadow:0 0 14px rgba(249,202,36,.55)}
+.dc-today .dn{color:#f9ca24}
+.dc-today .dres{color:#f9ca24}
+.dc-future{background:#dde4ed;color:#5a6e8c;border:1px solid rgba(90,110,140,.15)}
+.dc-future .dres{display:none}
+.dc-future .drep{display:none}
+.dc-offday{background:#3a3a52;color:rgba(255,255,255,.55);border:1px dashed rgba(255,255,255,.18)}
+.dc-stop{background:linear-gradient(135deg,#7f1d1d,#a52828);color:#fff}
+.dc-weekend{background:linear-gradient(135deg,#5a6e8c,#7d8fab);color:#fff}
+
 .plateau-svg{display:block;width:100%;height:auto;max-width:640px;margin:0 auto}
 .plateau-svg .case-clickable{cursor:pointer;transition:opacity .15s}
 .plateau-svg .case-clickable:hover{opacity:.85}
@@ -304,6 +327,14 @@ body.ios .route-car-emoji{transform:scaleX(-1)}
   .plateau-section{padding:18px 14px 22px;border-radius:22px;margin-bottom:14px}
   .plateau-title{font-size:1.5rem;letter-spacing:3px;margin-bottom:6px}
   .plateau-sub{font-size:.85rem;margin-bottom:14px}
+  .plateau-grid{grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:9px}
+  .dc{padding:9px 6px 10px;min-height:115px;border-radius:14px}
+  .dc .dd{font-size:.65rem}
+  .dc .dn{font-size:2.1rem}
+  .dc .dobj{font-size:.72rem}
+  .dc .drep{font-size:.7rem;padding:2px 7px}
+  .dc .dres{font-size:.92rem;padding-top:6px}
+  .dc .dbadge{font-size:1.05rem;top:5px;right:7px}
   .plateau-svg{max-width:1000px}
   .plateau-legend{font-size:.78rem;gap:14px;margin-top:14px;padding-top:14px}
   .plateau-legend .dot{width:12px;height:12px}
@@ -773,6 +804,9 @@ body.ios .route-car-emoji{transform:scaleX(-1)}
   <svg class="plateau-svg" viewBox="0 0 600 460" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <path id="snake" d="M 80 60 L 520 60 A 40 40 0 0 1 520 140 L 80 140 A 40 40 0 0 0 80 220 L 520 220 A 40 40 0 0 1 520 300 L 80 300 A 40 40 0 0 0 80 380 L 520 380"/>
+      <filter id="caseShadow" x="-10%" y="-30%" width="120%" height="160%">
+        <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#000" flood-opacity="0.35"/>
+      </filter>
     </defs>
     <use href="#snake" stroke="#ffffff" stroke-width="78" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M 520 60 A 40 40 0 0 1 520 140" stroke="#3a3a52" stroke-width="70" fill="none" stroke-linecap="butt"/>
@@ -1249,83 +1283,196 @@ function renderPlateau(){
   var cellsG=document.getElementById('plateauCells');
   var labelsG=document.getElementById('plateauLabels');
   var carG=document.getElementById('plateauCar');
+  if(!cellsG||!labelsG||!carG)return;
   cellsG.innerHTML='';labelsG.innerHTML='';carG.innerHTML='';
   var ti=todayIdx();
+  var SVG='http://www.w3.org/2000/svg';
+
+  // Pour chaque jour : dessiner une CASE rectangle arrondi en relief
   for(var i=0;i<N_DAYS;i++){
     var rect=plateauCellRect(i);
     var color=dayCellColor(i);
-    var line=document.createElementNS('http://www.w3.org/2000/svg','line');
-    line.setAttribute('x1',rect.x1);
-    line.setAttribute('y1',rect.y);
-    line.setAttribute('x2',rect.x2);
-    line.setAttribute('y2',rect.y);
-    line.setAttribute('stroke',color);
-    line.setAttribute('stroke-width','70');
-    line.setAttribute('stroke-linecap','butt');
-    line.setAttribute('class','case-clickable');
-    (function(idx){line.onclick=function(){openModal(idx);};})(i);
-    cellsG.appendChild(line);
+    var w=rect.x2-rect.x1;
+    var h=58; // hauteur de la case en relief
+    var x=rect.x1+1.5;
+    var y=rect.y-h/2;
+    // Ombre/relief en dessous (carte légèrement décalée)
+    var shadow=document.createElementNS(SVG,'rect');
+    shadow.setAttribute('x',x);
+    shadow.setAttribute('y',y+2);
+    shadow.setAttribute('width',w-3);
+    shadow.setAttribute('height',h);
+    shadow.setAttribute('rx',7);
+    shadow.setAttribute('fill','rgba(0,0,0,0.25)');
+    cellsG.appendChild(shadow);
+    // Carte principale colorée
+    var card=document.createElementNS(SVG,'rect');
+    card.setAttribute('x',x);
+    card.setAttribute('y',y);
+    card.setAttribute('width',w-3);
+    card.setAttribute('height',h);
+    card.setAttribute('rx',7);
+    card.setAttribute('fill',color);
+    card.setAttribute('stroke','rgba(0,0,0,0.25)');
+    card.setAttribute('stroke-width','1');
+    card.setAttribute('class','case-clickable');
+    (function(idx){card.onclick=function(){openModal(idx);};})(i);
+    cellsG.appendChild(card);
+    // Reflet brillant en haut (effet relief)
+    var shine=document.createElementNS(SVG,'rect');
+    shine.setAttribute('x',x+2);
+    shine.setAttribute('y',y+2);
+    shine.setAttribute('width',w-7);
+    shine.setAttribute('height',h*0.4);
+    shine.setAttribute('rx',5);
+    shine.setAttribute('fill','rgba(255,255,255,0.18)');
+    shine.setAttribute('pointer-events','none');
+    cellsG.appendChild(shine);
+    // Bordure aujourd'hui jaune doré
+    if(i===ti){
+      var borderTd=document.createElementNS(SVG,'rect');
+      borderTd.setAttribute('x',x-1);
+      borderTd.setAttribute('y',y-1);
+      borderTd.setAttribute('width',w-1);
+      borderTd.setAttribute('height',h+2);
+      borderTd.setAttribute('rx',8);
+      borderTd.setAttribute('fill','none');
+      borderTd.setAttribute('stroke','#f9ca24');
+      borderTd.setAttribute('stroke-width','2.5');
+      borderTd.setAttribute('pointer-events','none');
+      cellsG.appendChild(borderTd);
+    }
   }
-  // Labels (jour de la semaine + numéro + état)
+
+  // Labels (infos dans les cases, style avril)
   for(var i=0;i<N_DAYS;i++){
     var rect=plateauCellRect(i);
     var d=new Date(YEAR,MONTH,i+1);
+    var a=assess(i),s=S.sal[i];
+    var isToday=i===ti,isFut=i>ti,worked=WORKED[i];
     var col=dayTextColor(i);
     var dayName=DAYS_FULL[d.getDay()];
-    var stateTxt=dayStateLabel(i);
-    var isTd=i===todayIdx();
-    var fontSize=rect.row===4?7:8;
-    var numFs=rect.row===4?13:(isTd?16:14);
-    var yDay=rect.y-18;
-    var yNum=rect.y+(isTd&&rect.row!==4?5:3);
-    var yState=rect.y+20;
-    // Jour
-    var t1=document.createElementNS('http://www.w3.org/2000/svg','text');
-    t1.setAttribute('x',rect.cx);t1.setAttribute('y',yDay);
-    t1.setAttribute('font-size',fontSize);t1.setAttribute('fill',col);
-    if(i>todayIdx())t1.setAttribute('opacity','0.5');
-    t1.textContent=dayName;labelsG.appendChild(t1);
-    // Numéro
-    var t2=document.createElementNS('http://www.w3.org/2000/svg','text');
-    t2.setAttribute('x',rect.cx);t2.setAttribute('y',yNum);
-    t2.setAttribute('font-family','Audiowide');t2.setAttribute('font-size',numFs);t2.setAttribute('fill',col);
-    if(i>todayIdx())t2.setAttribute('opacity','0.6');
-    t2.textContent=(i+1);labelsG.appendChild(t2);
-    // Etat (ventes / obj) — Audiowide style dashboard, taille raisonnable
-    if(stateTxt){
-      var stateFs=rect.row===4?9:10;
-      var cellColor=dayCellColor(i);
-      var isYellowCell = (cellColor === '#f9ca24');
-      var tEt=document.createElementNS('http://www.w3.org/2000/svg','text');
-      tEt.setAttribute('x',rect.cx);
-      tEt.setAttribute('y',yState);
-      tEt.setAttribute('font-family','Audiowide, sans-serif');
-      tEt.setAttribute('font-size',stateFs);
-      if(isYellowCell){
-        tEt.setAttribute('fill','#1a1a2e');
-      }else{
-        tEt.setAttribute('fill','#f9ca24');
-        tEt.setAttribute('stroke','#1a1a2e');
-        tEt.setAttribute('stroke-width','0.4');
-        tEt.setAttribute('paint-order','stroke fill');
-      }
-      tEt.textContent=stateTxt;labelsG.appendChild(tEt);
+    var w=rect.x2-rect.x1;
+    var cx=rect.cx;
+    // Position relative au centre de la case
+    var yDay=rect.y-22;       // jour de la semaine (haut)
+    var yNum=rect.y-7;        // numéro (milieu haut)
+    var yObj=rect.y+5;        // objectif (milieu)
+    var yRep=rect.y+13;       // report (sous objectif)
+    var yRes=rect.y+22;       // résultat cumul/obj (bas)
+
+    // BADGE haut-droit (⚡ ou 🔧 ou 🛑 etc.)
+    var badge='';
+    if(isToday){
+      if(a.boostOk) badge='⚡';
+      else if(S.jokers[i]) badge='🔧';
+    }else if(worked===0&&d.getDay()!==0){
+      badge='🛑';
+    }else if(s!==null&&worked===1){
+      if(S.jokers[i]) badge='🔧';
+      else if(a.boostOk&&a.objOk) badge='⚡';
+      else if(a.objOk) badge='✅';
+      else if(a.boostOk) badge='⚡';
+    }else if(s!==null&&worked===2&&a.objOk){
+      badge='✅';
+    }
+    if(badge){
+      var tBadge=document.createElementNS(SVG,'text');
+      tBadge.setAttribute('x',cx+w/2-7);
+      tBadge.setAttribute('y',rect.y-15);
+      tBadge.setAttribute('font-size',rect.row===4?9:10);
+      tBadge.setAttribute('text-anchor','middle');
+      tBadge.textContent=badge;
+      labelsG.appendChild(tBadge);
+    }
+
+    // Jour de la semaine (LUN/MAR/etc.)
+    var t1=document.createElementNS(SVG,'text');
+    t1.setAttribute('x',cx);t1.setAttribute('y',yDay);
+    t1.setAttribute('font-size',rect.row===4?6:7);
+    t1.setAttribute('font-weight','800');
+    t1.setAttribute('fill',col);
+    t1.setAttribute('opacity','0.85');
+    t1.textContent=dayName;
+    labelsG.appendChild(t1);
+
+    // Numéro du jour (gros)
+    var t2=document.createElementNS(SVG,'text');
+    t2.setAttribute('x',cx);t2.setAttribute('y',yNum);
+    t2.setAttribute('font-family','Bebas Neue, sans-serif');
+    t2.setAttribute('font-size',rect.row===4?14:16);
+    t2.setAttribute('fill',col);
+    t2.setAttribute('font-weight','400');
+    t2.textContent=(i+1);
+    labelsG.appendChild(t2);
+
+    // Objectif 🎯+19
+    if(a.o>0&&!isFut){
+      var t3=document.createElementNS(SVG,'text');
+      t3.setAttribute('x',cx);t3.setAttribute('y',yObj);
+      t3.setAttribute('font-size',rect.row===4?6.5:7.5);
+      t3.setAttribute('font-weight','700');
+      t3.setAttribute('fill',col);
+      t3.setAttribute('opacity','0.9');
+      t3.textContent='🎯'+a.o;
+      labelsG.appendChild(t3);
+    }
+
+    // Report ☀️+4 (en pastille jaune)
+    if(a.r>0&&!isFut&&s!==null){
+      var repText='☀️+'+a.r;
+      // Mesure approximative pour la pastille
+      var pillW=repText.length*4.5+6;
+      var pillBg=document.createElementNS(SVG,'rect');
+      pillBg.setAttribute('x',cx-pillW/2);
+      pillBg.setAttribute('y',yRep-5);
+      pillBg.setAttribute('width',pillW);
+      pillBg.setAttribute('height',7);
+      pillBg.setAttribute('rx',3);
+      pillBg.setAttribute('fill','#f9ca24');
+      labelsG.appendChild(pillBg);
+      var t4=document.createElementNS(SVG,'text');
+      t4.setAttribute('x',cx);t4.setAttribute('y',yRep);
+      t4.setAttribute('font-size',rect.row===4?5:6);
+      t4.setAttribute('font-weight','800');
+      t4.setAttribute('fill','#1a1a2e');
+      t4.textContent=repText;
+      labelsG.appendChild(t4);
+    }
+
+    // Résultat (cumul/obj) en bas
+    if(s!==null){
+      var resStr=a.cumul+(a.o>0?'/'+a.o:'');
+      var t5=document.createElementNS(SVG,'text');
+      t5.setAttribute('x',cx);t5.setAttribute('y',yRes);
+      t5.setAttribute('font-family','Audiowide, sans-serif');
+      t5.setAttribute('font-size',rect.row===4?8:9);
+      t5.setAttribute('fill',col);
+      t5.textContent=resStr;
+      labelsG.appendChild(t5);
+    }else if(isToday){
+      var t5=document.createElementNS(SVG,'text');
+      t5.setAttribute('x',cx);t5.setAttribute('y',yRes);
+      t5.setAttribute('font-family','Audiowide, sans-serif');
+      t5.setAttribute('font-size',rect.row===4?6.5:7.5);
+      t5.setAttribute('fill',col);
+      t5.textContent='EN COURS';
+      labelsG.appendChild(t5);
     }
   }
-  // Voiture sur le jour courant
+
+  // Voiture sur le jour courant (au-dessus de la case)
   var tRect=plateauCellRect(ti);
-  var car=document.createElementNS('http://www.w3.org/2000/svg','g');
+  var car=document.createElementNS(SVG,'g');
   car.setAttribute('class','car-today');
-  var cText=document.createElementNS('http://www.w3.org/2000/svg','text');
+  var cText=document.createElementNS(SVG,'text');
   cText.setAttribute('x',tRect.cx);
-  cText.setAttribute('y',tRect.y-28);
+  cText.setAttribute('y',tRect.y-38);
   cText.setAttribute('text-anchor','middle');
-  cText.setAttribute('font-size','34');
+  cText.setAttribute('font-size','30');
   cText.setAttribute('filter','drop-shadow(0 4px 6px rgba(0,0,0,0.5))');
-  // Mirror horizontal sur iOS pour orienter la voiture vers la droite
-  if(document.body.classList.contains('ios')){
-    cText.setAttribute('transform','translate('+(2*tRect.cx)+',0) scale(-1,1)');
-  }
+  // Mirror horizontal pour orienter la voiture vers la droite (sens de la route)
+  cText.setAttribute('transform','translate('+(2*tRect.cx)+',0) scale(-1,1)');
   cText.textContent='🚗';
   car.appendChild(cText);
   carG.appendChild(car);
