@@ -1981,10 +1981,23 @@ function showPalmares(){
 
 function replayCelebrations(){
   var ti=todayIdx(),todayStart=new Date(YEAR,MONTH,ti+1).getTime();
-  var evs=S.events?S.events.filter(function(ev){return ev.ts>=todayStart&&(ev.type==='celebration'||ev.type==='floating');}):[];
+  var REPLAYABLE=['celebration','floating','objectifFlag','turboF1','regulateurCard','earlyBirdAnim'];
+  var evs=S.events?S.events.filter(function(ev){return ev.ts>=todayStart&&REPLAYABLE.indexOf(ev.type)>=0;}):[];
   if(!evs.length){showToast('Aucune célébration aujourd\'hui encore !');return;}
+  // Délais adaptés selon le type (animations longues = plus de temps)
+  function durationFor(t){
+    if(t==='objectifFlag') return 4000;
+    if(t==='turboF1') return 3500;
+    if(t==='regulateurCard') return 3500;
+    if(t==='earlyBirdAnim') return 4500;
+    if(t==='celebration') return 2500;
+    return 1800; // floating
+  }
   var delay=0;
-  for(var i=0;i<evs.length;i++){(function(ev,d){setTimeout(function(){playEvent(ev);},d);})(evs[i],delay);delay+=2000;}
+  for(var i=0;i<evs.length;i++){
+    (function(ev,d){setTimeout(function(){playEvent(ev);},d);})(evs[i],delay);
+    delay+=durationFor(evs[i].type);
+  }
 }
 
 function launchConfetti(){
