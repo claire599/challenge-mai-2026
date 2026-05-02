@@ -494,26 +494,33 @@ body.ios .route-car-emoji{transform:scaleX(-1)}
       <path d="M -2.5 5 Q 0 7 2.5 5" stroke="#1a1a2e" stroke-width="1" fill="none" stroke-linecap="round"/>
     </g>
 
-    <!-- TÊTE 4 : blonde à lunettes -->
+    <!-- TÊTE 4 : blonde à lunettes (bob carré, mèche frontale) -->
     <g transform="translate(262,60)">
+      <!-- T-shirt jaune -->
       <path d="M -14 14 Q -14 8 -7 7 L 7 7 Q 14 8 14 14 L 14 16 L -14 16 Z" fill="#fdcb6e"/>
+      <!-- Cou -->
       <rect x="-3.5" y="3" width="7" height="6" fill="#f4c8a8"/>
-      <!-- Cheveux blonds mi-longs avec frange -->
-      <path d="M -11 -3 Q -11 -14 0 -14 Q 11 -14 11 -3 L 11 6 Q 10 8 8 8 L 5 8 Q 8 4 8 -1 L -8 -1 Q -8 4 -5 8 L -8 8 Q -10 8 -11 6 Z" fill="#e8c785"/>
-      <ellipse cx="0" cy="0" rx="9.5" ry="11" fill="#f4c8a8" stroke="#1a1a2e" stroke-width="0.7"/>
-      <!-- Frange côté -->
-      <path d="M -9 -4 Q -2 -8 9 -3 Q 6 -1 0 -1 Q -7 -1 -9 -4 Z" fill="#d4af6a"/>
-      <!-- Lunettes rondes -->
-      <circle cx="-4" cy="1.5" r="3.2" fill="#fff" opacity="0.4" stroke="#1a1a2e" stroke-width="1.2"/>
-      <circle cx="4" cy="1.5" r="3.2" fill="#fff" opacity="0.4" stroke="#1a1a2e" stroke-width="1.2"/>
-      <line x1="-1" y1="1.5" x2="1" y2="1.5" stroke="#1a1a2e" stroke-width="1"/>
+      <!-- Cheveux blonds (bob carré, base derrière les oreilles) -->
+      <path d="M -10 -2 Q -11 -13 0 -13 Q 11 -13 10 -2 L 10 5 Q 9 6 7 6 L 6 6 Q 9 2 9 -2 L -9 -2 Q -9 2 -6 6 L -7 6 Q -9 6 -10 5 Z" fill="#f0d28b"/>
+      <!-- Visage -->
+      <ellipse cx="0" cy="0" rx="9" ry="10.5" fill="#f4c8a8" stroke="#1a1a2e" stroke-width="0.7"/>
+      <!-- Mèche frontale qui tombe sur le côté -->
+      <path d="M -8 -6 Q -2 -9 7 -5 Q 8 -3 5 -2 Q 1 -1 -3 -1 Q -7 -1 -8 -6 Z" fill="#e8c478"/>
+      <!-- Lunettes rondes discrètes -->
+      <circle cx="-4" cy="1.5" r="2.6" fill="rgba(255,255,255,0.25)" stroke="#1a1a2e" stroke-width="1"/>
+      <circle cx="4" cy="1.5" r="2.6" fill="rgba(255,255,255,0.25)" stroke="#1a1a2e" stroke-width="1"/>
+      <line x1="-1.4" y1="1.5" x2="1.4" y2="1.5" stroke="#1a1a2e" stroke-width="0.9"/>
       <!-- Branches -->
-      <line x1="7" y1="1" x2="9.5" y2="0" stroke="#1a1a2e" stroke-width="1"/>
-      <line x1="-7" y1="1" x2="-9.5" y2="0" stroke="#1a1a2e" stroke-width="1"/>
+      <line x1="6.6" y1="1" x2="9" y2="0" stroke="#1a1a2e" stroke-width="0.9"/>
+      <line x1="-6.6" y1="1" x2="-9" y2="0" stroke="#1a1a2e" stroke-width="0.9"/>
       <!-- Yeux derrière les lunettes -->
-      <circle cx="-4" cy="1.5" r="0.7" fill="#1a1a2e"/>
-      <circle cx="4" cy="1.5" r="0.7" fill="#1a1a2e"/>
-      <path d="M -2.5 6 Q 0 8 2.5 6" stroke="#1a1a2e" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <circle cx="-4" cy="1.5" r="0.8" fill="#1a1a2e"/>
+      <circle cx="4" cy="1.5" r="0.8" fill="#1a1a2e"/>
+      <!-- Boucle d'oreille (petit point doré) -->
+      <circle cx="-9" cy="2" r="0.7" fill="#f9ca24"/>
+      <circle cx="9" cy="2" r="0.7" fill="#f9ca24"/>
+      <!-- Sourire -->
+      <path d="M -2.5 5.5 Q 0 7 2.5 5.5" stroke="#1a1a2e" stroke-width="1" fill="none" stroke-linecap="round"/>
     </g>
 
     <!-- TÊTE 5 : brun à lunettes + barbe de 3 jours (conducteur) -->
@@ -1326,142 +1333,140 @@ function renderPlateau(){
 function adjSal(v){var el=document.getElementById('iSal');el.value=Math.max(0,(parseInt(el.value)||0)+v);}
 function adjRdv(v){var el=document.getElementById('iRdv');el.value=Math.max(0,(parseInt(el.value)||0)+v);}
 
-// ===== SAVE RDV (optimiste — UI instantanée) =====
+// ===== SAVE RDV (instantané — fire-and-forget) =====
 function saveRdv(){
   var ti=todayIdx();
   var rdv=parseInt(document.getElementById('iRdv').value);
   if(isNaN(rdv)||rdv<0){showToast('❌ Valeur invalide');return;}
-  var prevLocal=S.rdv[ti]||0;
-  if(rdv<prevLocal){showToast('⚠️ Anti-régression : '+prevLocal+' RDV déjà saisis');document.getElementById('iRdv').value=prevLocal;return;}
+  var prev=S.rdv[ti]||0;
+  if(rdv<prev){showToast('⚠️ Anti-régression : '+prev+' RDV déjà saisis');document.getElementById('iRdv').value=prev;return;}
 
-  // 1) Update local INSTANTANÉ
+  // 1) UPDATE LOCAL IMMÉDIAT
   S.rdv[ti]=rdv;
+  var added=rdv-prev;
+
+  // 2) RENDER + ANIMATIONS IMMÉDIATS
   render();
   showToast('✅ Enregistré');
+  if(added>0){for(var n=0;n<added;n++){(function(d){setTimeout(function(){spawnFlyingPhone();},d);})(n*200);}}
 
-  // 2) Sync EN ARRIÈRE-PLAN
-  sync('⏳ Sync…','#7f8c8d');
-  loadShared().then(function(){
-    var prev=S.rdv[ti]||0;
-    if(prev>rdv){rdv=prev;document.getElementById('iRdv').value=prev;}
-    S.rdv[ti]=rdv;
-    var added=rdv-prev;
-    if(added>0){for(var n=0;n<added;n++){(function(d){setTimeout(function(){spawnFlyingPhone();},d);})(n*200);}}
-    var newT=Math.floor(rdv/3),prevT=Math.floor(prev/3);
-    if(newT>prevT){
-      for(var t=prevT+1;t<=newT;t++){
-        (function(tr){
-          var prize=RDV_PRIZES[Math.floor(Math.random()*RDV_PRIZES.length)];
-          var ts=Date.now()+tr*5;
-          pushEvent('rdvbon',{prize:prize,ts:ts});
-          setTimeout(function(){spawnRdvTicket(prize,ts);},tr*300);
-        })(t);
-      }
+  // 3) BONS RDV (1 tous les 3 RDV)
+  var newT=Math.floor(rdv/3),prevT=Math.floor(prev/3);
+  if(newT>prevT){
+    for(var t=prevT+1;t<=newT;t++){
+      (function(tr){
+        var prize=RDV_PRIZES[Math.floor(Math.random()*RDV_PRIZES.length)];
+        var ts=Date.now()+tr*5;
+        pushEvent('rdvbon',{prize:prize,ts:ts});
+        setTimeout(function(){spawnRdvTicket(prize,ts);},tr*300);
+      })(t);
     }
-    render();
-    saveShared();
-  });
+  }
+
+  // 4) SAVE EN BACKGROUND TOTAL
+  sync('⏳ Sync…','#7f8c8d');
+  saveShared();
 }
 
-// ===== SAVE VENTES (optimiste — UI instantanée) =====
+// ===== SAVE VENTES (instantané — fire-and-forget) =====
 function saveVentes(){
   var ti=todayIdx();
   if(WORKED[ti]===0){showToast('⛔ Pas de challenge aujourd\'hui !');return;}
   var sal=parseInt(document.getElementById('iSal').value);
   if(isNaN(sal)||sal<0){showToast('❌ Indiquer les ventes');return;}
-  var prevLocal=S.sal[ti]||0;
-  if(prevLocal>0&&sal<prevLocal){showToast('⚠️ Anti-régression : '+prevLocal+' ventes déjà saisies');document.getElementById('iSal').value=prevLocal;return;}
+  var prev=S.sal[ti]||0;
+  if(prev>0&&sal<prev){showToast('⚠️ Anti-régression : '+prev+' ventes déjà saisies');document.getElementById('iSal').value=prev;return;}
 
-  // 1) Update local INSTANTANÉ + render
+  var added=sal-prev,rep=S.rep[ti]||0,obj=S.obj[ti]||0;
+  var prevCumul=prev+rep,newCumul=sal+rep;
+  var prevBoostHalf=prev>=8,prevObjHalf=obj>0&&prevCumul>=Math.round(obj*0.5);
+  var prevBoost=prev>=MIN_BOOST,prevObj=obj>0&&prevCumul>=obj;
+  var todayStr=todayKey();
+
+  // 1) UPDATE LOCAL IMMÉDIAT
   S.sal[ti]=sal;
+  if(!S.events) S.events=[];
+  if(!S.milestones||S.milestones.day!==ti||!S.milestones.m1||!S.milestones.m2){
+    var mid=Math.max(1,Math.round(obj*0.5)),sc=rep;
+    var m1=Math.round(sc+1+Math.random()*Math.max(0,mid-sc-2));
+    var m2=Math.round(mid+1+Math.random()*Math.max(0,obj-mid-2));
+    if(m1<=sc)m1=sc+1;if(m1>=mid)m1=Math.max(sc+1,mid-1);
+    if(m2<=mid)m2=mid+1;if(m2>=obj)m2=obj-1;if(m2<=m1)m2=m1+1;
+    if(m1<=0||m1>=obj)m1=Math.max(1,Math.round(obj*0.3));
+    if(m2<=m1||m2>=obj)m2=Math.round(obj*0.7);
+    S.milestones={day:ti,m1:m1,m2:m2,m1done:m1<=prevCumul,m2done:m2<=prevCumul,
+      regulateurDone:prev>=MIN_BOOST,earlyBirdDone:false,turboDone:false,glaceComboDone:false,
+      lastIndivIdx:-1,lastRdvIdx:-1};
+  }
+
+  // 2) RENDER + ANIMATIONS IMMÉDIATS
   render();
   showToast('✅ Enregistré');
+  if(added>0){for(var n=0;n<added;n++){(function(d){setTimeout(function(){spawnPlusOne(1);},d);})(n*150);}}
 
-  // 2) Sync EN ARRIÈRE-PLAN (le bouton reste cliquable, pas de blocage UI)
+  var a=assess(ti);
+
+  // 3) JALONS + DÉCLENCHEURS IMMÉDIATS
+  if(obj>0&&!S.milestones.m1done&&prevCumul<S.milestones.m1&&newCumul>=S.milestones.m1){
+    S.milestones.m1done=true;var ts1=Date.now();var p1=randomIndivPrize();
+    pushEvent('ticket',{prize:p1,ts:ts1});setTimeout(function(){spawnGoldenTicketForAll(p1,ts1);},400);
+  }
+  if(obj>0&&!S.milestones.m2done&&prevCumul<S.milestones.m2&&newCumul>=S.milestones.m2){
+    S.milestones.m2done=true;var ts2=Date.now()+1;var p2=randomIndivPrize();
+    pushEvent('ticket',{prize:p2,ts:ts2});setTimeout(function(){spawnGoldenTicketForAll(p2,ts2);},600);
+  }
+  if(WORKED[ti]===1&&!prevBoostHalf&&sal>=8){
+    pushEvent('floating',{icon:'⚡',label:'50% Régulateur !',size:'medium'});
+    showFloatingIcon('⚡','50% Régulateur !','medium');
+  }
+  if(WORKED[ti]===1&&a.boostOk&&!prevBoost){
+    if(!S.milestones.regulateurDone){
+      S.milestones.regulateurDone=true;
+      var ts3=Date.now()+2;var p3=randomIndivPrize();
+      pushEvent('ticket',{prize:p3,ts:ts3});
+      pushEvent('regulateurCard',{});
+      setTimeout(function(){spawnRegulateurAnim(p3,ts3);},600);
+    }
+  }
+  if(obj>0&&!prevObjHalf&&newCumul>=Math.round(obj*0.5)){
+    pushEvent('floating',{icon:'🎯',label:'50% Objectif !',size:'medium'});
+    showFloatingIcon('🎯','50% Objectif !','medium');
+  }
+  if(a.objOk&&!prevObj){
+    pushEvent('objectifFlag',{});
+    spawnObjectifFlag();
+  }
+  if(!S.milestones.earlyBirdDone&&sal>=7&&(new Date().getHours()<14)){
+    S.milestones.earlyBirdDone=true;var tseb=Date.now()+3;var pb=randomIndivPrize();
+    pushEvent('earlybird',{prize:pb,ts:tseb});
+    pushEvent('earlyBirdAnim',{});
+    spawnEarlyBirdAnim();
+    setTimeout(function(){spawnGoldenTicketForAll(pb,tseb);},1500);
+    addTrophy('🌅','Early Bird !',todayStr);
+    if(S.milestones.turboDone&&!S.milestones.glaceComboDone) triggerGlaceCombo();
+  }
+  if(obj>0&&sal>=obj+5&&!S.milestones.turboDone){
+    S.milestones.turboDone=true;var tst=Date.now()+4;var pt=randomIndivPrize();
+    pushEvent('turbo',{prize:pt,ts:tst});
+    pushEvent('turboF1',{});
+    setTimeout(function(){spawnTurboAnim(pt,tst);addTrophy('🚀','Turbo !',todayStr);},400);
+    if(S.milestones.earlyBirdDone&&!S.milestones.glaceComboDone) triggerGlaceCombo();
+  }
+  var prevCumulMonth=cumulMonth()-added;
+  var newCumulMonth=cumulMonth();
+  if(!S.jalon200Done&&prevCumulMonth<JALON_BORNES&&newCumulMonth>=JALON_BORNES){
+    S.jalon200Done=true;var ts200=Date.now()+5;
+    pushEvent('jalon200',{prize:COLLECTIF_RESTO,ts:ts200});
+    pushEvent('floating',{icon:'🎁',label:'JALON 200 BORNES !',size:'big'});
+    pushEvent('celebration',{kind:'jalon200'});
+    showFloatingIcon('🎁','JALON 200 BORNES !','big');
+    setTimeout(function(){showCelebration('jalon200');},800);
+    setTimeout(function(){spawnGoldenTicketForAll(COLLECTIF_RESTO,ts200);},2200);
+  }
+
+  // 4) SAVE EN BACKGROUND TOTAL (fire-and-forget, pas bloquant)
   sync('⏳ Sync…','#7f8c8d');
-  loadShared().then(function(){
-    var prev=S.sal[ti]||0;
-    if(prev>sal){sal=prev;document.getElementById('iSal').value=prev;}
-    var added=sal-prev,rep=S.rep[ti]||0,obj=S.obj[ti]||0;
-    var prevCumul=prev+rep,newCumul=sal+rep;
-    var prevBoostHalf=prev>=8,prevObjHalf=obj>0&&prevCumul>=Math.round(obj*0.5);
-    var prevBoost=prev>=MIN_BOOST,prevObj=obj>0&&prevCumul>=obj;
-    var todayStr=todayKey();
-    S.sal[ti]=sal;
-    if(!S.events) S.events=[];
-    if(!S.milestones||S.milestones.day!==ti||!S.milestones.m1||!S.milestones.m2){
-      var mid=Math.max(1,Math.round(obj*0.5)),sc=rep;
-      var m1=Math.round(sc+1+Math.random()*Math.max(0,mid-sc-2));
-      var m2=Math.round(mid+1+Math.random()*Math.max(0,obj-mid-2));
-      if(m1<=sc)m1=sc+1;if(m1>=mid)m1=Math.max(sc+1,mid-1);
-      if(m2<=mid)m2=mid+1;if(m2>=obj)m2=obj-1;if(m2<=m1)m2=m1+1;
-      if(m1<=0||m1>=obj)m1=Math.max(1,Math.round(obj*0.3));
-      if(m2<=m1||m2>=obj)m2=Math.round(obj*0.7);
-      S.milestones={day:ti,m1:m1,m2:m2,m1done:m1<=prevCumul,m2done:m2<=prevCumul,
-        regulateurDone:prev>=MIN_BOOST,earlyBirdDone:false,turboDone:false,glaceComboDone:false,
-        lastIndivIdx:-1,lastRdvIdx:-1};
-    }
-    render();
-    if(added>0){for(var n=0;n<added;n++){(function(d){setTimeout(function(){spawnPlusOne(1);},d);})(n*150);}}
-    var a=assess(ti);
-    if(obj>0&&!S.milestones.m1done&&prevCumul<S.milestones.m1&&newCumul>=S.milestones.m1){
-      S.milestones.m1done=true;var ts1=Date.now();var p1=randomIndivPrize();
-      pushEvent('ticket',{prize:p1,ts:ts1});setTimeout(function(){spawnGoldenTicketForAll(p1,ts1);},400);
-    }
-    if(obj>0&&!S.milestones.m2done&&prevCumul<S.milestones.m2&&newCumul>=S.milestones.m2){
-      S.milestones.m2done=true;var ts2=Date.now()+1;var p2=randomIndivPrize();
-      pushEvent('ticket',{prize:p2,ts:ts2});setTimeout(function(){spawnGoldenTicketForAll(p2,ts2);},600);
-    }
-    if(WORKED[ti]===1&&!prevBoostHalf&&sal>=8){
-      pushEvent('floating',{icon:'⚡',label:'50% Régulateur !',size:'medium'});
-      showFloatingIcon('⚡','50% Régulateur !','medium');
-    }
-    if(WORKED[ti]===1&&a.boostOk&&!prevBoost){
-      if(!S.milestones.regulateurDone){
-        S.milestones.regulateurDone=true;
-        var ts3=Date.now()+2;var p3=randomIndivPrize();
-        pushEvent('ticket',{prize:p3,ts:ts3});
-        pushEvent('regulateurCard',{});
-        setTimeout(function(){spawnRegulateurAnim(p3,ts3);},600);
-      }
-    }
-    if(obj>0&&!prevObjHalf&&newCumul>=Math.round(obj*0.5)){
-      pushEvent('floating',{icon:'🎯',label:'50% Objectif !',size:'medium'});
-      showFloatingIcon('🎯','50% Objectif !','medium');
-    }
-    if(a.objOk&&!prevObj){
-      pushEvent('objectifFlag',{});
-      spawnObjectifFlag();
-    }
-    if(!S.milestones.earlyBirdDone&&sal>=7&&(new Date().getHours()<14)){
-      S.milestones.earlyBirdDone=true;var tseb=Date.now()+3;var pb=randomIndivPrize();
-      pushEvent('earlybird',{prize:pb,ts:tseb});
-      pushEvent('earlyBirdAnim',{});
-      spawnEarlyBirdAnim();
-      setTimeout(function(){spawnGoldenTicketForAll(pb,tseb);},1500);
-      addTrophy('🌅','Early Bird !',todayStr);
-      if(S.milestones.turboDone&&!S.milestones.glaceComboDone) triggerGlaceCombo();
-    }
-    if(obj>0&&sal>=obj+5&&!S.milestones.turboDone){
-      S.milestones.turboDone=true;var tst=Date.now()+4;var pt=randomIndivPrize();
-      pushEvent('turbo',{prize:pt,ts:tst});
-      pushEvent('turboF1',{});
-      setTimeout(function(){spawnTurboAnim(pt,tst);addTrophy('🚀','Turbo !',todayStr);},400);
-      if(S.milestones.earlyBirdDone&&!S.milestones.glaceComboDone) triggerGlaceCombo();
-    }
-    var prevCumulMonth=cumulMonth()-added;
-    var newCumulMonth=cumulMonth();
-    if(!S.jalon200Done&&prevCumulMonth<JALON_BORNES&&newCumulMonth>=JALON_BORNES){
-      S.jalon200Done=true;var ts200=Date.now()+5;
-      pushEvent('jalon200',{prize:COLLECTIF_RESTO,ts:ts200});
-      pushEvent('floating',{icon:'🎁',label:'JALON 200 BORNES !',size:'big'});
-      pushEvent('celebration',{kind:'jalon200'});
-      showFloatingIcon('🎁','JALON 200 BORNES !','big');
-      setTimeout(function(){showCelebration('jalon200');},800);
-      setTimeout(function(){spawnGoldenTicketForAll(COLLECTIF_RESTO,ts200);},2200);
-    }
-    saveShared();
-  });
+  saveShared();
 }
 
 function triggerGlaceCombo(){
