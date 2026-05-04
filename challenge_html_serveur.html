@@ -759,7 +759,7 @@ h1 .accent{color:#d63031}
   <div class="reg-head">
     <div class="reg-icon">🛣️</div>
     <div>
-      <div class="reg-title" id="bpTitle">RÉGULATEUR DE VITESSE (+25% EN JEU)</div>
+      <div class="reg-title" id="bpTitle">RÉGULATEUR DE VITESSE (+20% EN JEU)</div>
       <div class="reg-sub" id="bpSub">—</div>
     </div>
   </div>
@@ -1151,7 +1151,7 @@ function renderBooster(){
     else{status.push('fail');fails++;}
   }
   var alive=fails===0,jLeft=MAX_JOKERS-jokersUsed;
-  document.getElementById('bpTitle').textContent=alive?'RÉGULATEUR DE VITESSE (+25% EN JEU)':'RÉGULATEUR DE VITESSE (+25% PERDU)';
+  document.getElementById('bpTitle').textContent=alive?'RÉGULATEUR DE VITESSE (+20% EN JEU)':'RÉGULATEUR DE VITESSE (+20% PERDU)';
   document.getElementById('bpSub').textContent=alive
     ?daysOk+' jour'+(daysOk>1?'s':'')+' validé'+(daysOk>1?'s':'')+' · '+jLeft+' roue'+(jLeft!==1?'s':'')+' de secours restante'+(jLeft!==1?'s':'')
     :fails+' jour'+(fails>1?'s':'')+' sans roue de secours — régulateur perdu';
@@ -1780,7 +1780,7 @@ function spawnRegulateurAnim(prize,ts){
       '<div class="av-face av-front">'+
         '<div style="font-family:Bebas Neue,sans-serif;font-size:.7rem;letter-spacing:2px;color:#1a1a2e;margin-bottom:6px">▼ AS DU VOLANT ▼</div>'+
         '<div style="font-size:3rem;line-height:1;margin-top:6px">🛣️</div>'+
-        '<div style="font-family:Audiowide,sans-serif;font-size:2.4rem;color:#f0932b;line-height:1;margin-top:10px;text-shadow:2px 2px 0 #1a1a2e">+25%</div>'+
+        '<div style="font-family:Audiowide,sans-serif;font-size:2.4rem;color:#f0932b;line-height:1;margin-top:10px;text-shadow:2px 2px 0 #1a1a2e">+20%</div>'+
         '<div style="font-family:Bebas Neue,sans-serif;font-size:1rem;letter-spacing:2.5px;color:#d63031;margin-top:8px">DÉCLENCHÉ !</div>'+
         '<div style="font-family:Bebas Neue,sans-serif;font-size:.7rem;letter-spacing:2px;color:#1a1a2e;margin-top:14px;opacity:.6">▲ 16 VENTES ▲</div>'+
       '</div>'+
@@ -1863,7 +1863,7 @@ function showCelebration(type){
   var icon,title,sub,cls;
   if(type==='obj'){icon='🎯';title='OBJECTIF<br>ATTEINT !';sub='L\'équipe est en feu ! 🔥';cls='obj-card';}
   else if(type==='jalon200'){icon='🎁';title='JALON 200<br>FRANCHI !';sub='Resto routier pour toute l\'équipe ! 🛻';cls='boost-card';}
-  else{icon='⚡';title='RÉGULATEUR<br>+25% VALIDÉ !';sub='Le bonus est déclenché ! 💰';cls='boost-card';}
+  else{icon='⚡';title='RÉGULATEUR<br>+20% VALIDÉ !';sub='Le bonus est déclenché ! 💰';cls='boost-card';}
   ov.innerHTML='<div class="celebration-card '+cls+'"><span class="cc-icon">'+icon+'</span><div class="cc-title">'+title+'</div><div class="cc-sub">'+sub+'</div><button onclick="this.closest(\'.celebration-overlay\').remove()">🔥 LET\'S GO !</button></div>';
   document.body.appendChild(ov);
 }
@@ -2103,20 +2103,23 @@ function closeModal(){document.getElementById('modalBg').classList.remove('open'
 
 function saveModal(){
   if(editIdx<0)return;
-  sync('⏳ Enregistrement…','#7f8c8d');
-  loadShared().then(function(){
-    var o=parseInt(document.getElementById('mObj').value),r=parseInt(document.getElementById('mRep').value);
-    var s=document.getElementById('mSal').value,rdv=document.getElementById('mRdv').value;
-    S.obj[editIdx]=!isNaN(o)&&o>=0?o:0;
-    S.rep[editIdx]=!isNaN(r)&&r>=0?r:0;
-    S.sal[editIdx]=s!==''&&!isNaN(parseInt(s))?parseInt(s):null;
-    S.rdv[editIdx]=rdv!==''&&!isNaN(parseInt(rdv))?parseInt(rdv):null;
-    S.jokers[editIdx]=document.getElementById('mJoker').checked;
-    var ti=todayIdx();
-    if(editIdx===ti&&S.sal[ti]!==null)document.getElementById('iSal').value=S.sal[ti];
-    if(editIdx===ti&&S.rdv[ti]!==null)document.getElementById('iRdv').value=S.rdv[ti];
-    render();saveShared();closeModal();showToast('✅ Mis à jour !');
-  });
+  var o=parseInt(document.getElementById('mObj').value),r=parseInt(document.getElementById('mRep').value);
+  var s=document.getElementById('mSal').value,rdv=document.getElementById('mRdv').value;
+  S.obj[editIdx]=!isNaN(o)&&o>=0?o:0;
+  S.rep[editIdx]=!isNaN(r)&&r>=0?r:0;
+  S.sal[editIdx]=s!==''&&!isNaN(parseInt(s))?parseInt(s):null;
+  S.rdv[editIdx]=rdv!==''&&!isNaN(parseInt(rdv))?parseInt(rdv):null;
+  S.jokers[editIdx]=document.getElementById('mJoker').checked;
+  var ti=todayIdx();
+  if(editIdx===ti&&S.sal[ti]!==null)document.getElementById('iSal').value=S.sal[ti];
+  if(editIdx===ti&&S.rdv[ti]!==null)document.getElementById('iRdv').value=S.rdv[ti];
+  // 1) UI INSTANTANÉ
+  render();
+  closeModal();
+  showToast('✅ Mis à jour !');
+  // 2) SAVE EN BACKGROUND
+  sync('⏳ Sync…','#7f8c8d');
+  saveShared();
 }
 
 document.getElementById('modalBg').onclick=function(e){if(e.target===document.getElementById('modalBg'))closeModal();};
