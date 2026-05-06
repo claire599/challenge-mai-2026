@@ -893,20 +893,21 @@ var WORKED=[0,2,0,1,1,1,1,0,2,0,1,1,1,0,1,2,0,1,1,1,1,1,2,0,1,1,1,1,1,2,0];
 
 // ===== BONS =====
 // Bons individuels ventes (14) : 9 station-service + 4 stations spéciales + ticket à gratter
+// food:true = boisson/nourriture (max 1/jour)
 var INDIV_PRIZES=[
-  {icon:'🌮',label:'Halte gourmande (15€) !'},
+  {icon:'🌮',label:'Halte gourmande (15€) !',food:true},
   {icon:'📸',label:'20 photos imprimées !'},
   {icon:'🎟️',label:'Ticket attraction touristique !'},
   {icon:'🎲',label:'Jeu de voyage !'},
   {icon:'😴',label:'Masque défatiguant !'},
   {icon:'🦶',label:'Masque pieds du voyageur !'},
   {icon:'💆',label:'Carte Sephora 15€ !'},
-  {icon:'🍿',label:'Snack « La pause s\'impose » (10€) !'},
+  {icon:'🍿',label:'Snack « La pause s\'impose » (10€) !',food:true},
   {icon:'📖',label:'Livre de poche !'},
-  {icon:'⛽',label:'Café & viennoiserie !'},
-  {icon:'🍫',label:'Barre choco voyage !'},
-  {icon:'🥤',label:'Boisson fraîche !'},
-  {icon:'🍿',label:'Pop-corn cinéma !'},
+  {icon:'⛽',label:'Café & viennoiserie !',food:true},
+  {icon:'🍫',label:'Barre choco voyage !',food:true},
+  {icon:'🥤',label:'Boisson fraîche !',food:true},
+  {icon:'🍿',label:'Pop-corn cinéma !',food:true},
   {icon:'🍀',label:'Ticket jeu à gratter !'}
 ];
 
@@ -1545,7 +1546,7 @@ function saveVentes(){
     if(m2<=m1||m2>=obj)m2=Math.round(obj*0.7);
     S.milestones={day:ti,m1:m1,m2:m2,m1done:m1<=prevCumul,m2done:m2<=prevCumul,
       regulateurDone:prev>=MIN_BOOST,earlyBirdDone:false,turboDone:false,glaceComboDone:false,
-      lastIndivIdx:-1,lastRdvIdx:-1};
+      lastIndivIdx:-1,lastRdvIdx:-1,foodDone:false};
   }
 
   // 2) RENDER + ANIMATIONS IMMÉDIATS
@@ -1630,11 +1631,24 @@ function triggerGlaceCombo(){
 // ===== RANDOM PRIZE (sans répétition immédiate) =====
 function randomIndivPrize(){
   var li=S.milestones?S.milestones.lastIndivIdx:-1;
-  var av=[];for(var i=0;i<INDIV_PRIZES.length;i++){if(i!==li)av.push(i);}
+  // Si un bon food a déjà été tiré aujourd'hui, exclure les food
+  var foodAlready=S.milestones&&S.milestones.foodDone;
+  var av=[];
+  for(var i=0;i<INDIV_PRIZES.length;i++){
+    if(i===li) continue; // pas le même qu'au tirage précédent
+    if(foodAlready && INDIV_PRIZES[i].food) continue; // pas de 2e food dans la journée
+    av.push(i);
+  }
+  // Fallback : si tout est exclu (cas rare), autorise tout sauf li
+  if(!av.length){
+    for(var i=0;i<INDIV_PRIZES.length;i++){if(i!==li)av.push(i);}
+  }
   if(!av.length)av=[0];
   var idx=av[Math.floor(Math.random()*av.length)];
-  if(S.milestones)S.milestones.lastIndivIdx=idx;
-  // Marquer comme bon individuel (pas collectif, pas RDV)
+  if(S.milestones){
+    S.milestones.lastIndivIdx=idx;
+    if(INDIV_PRIZES[idx].food) S.milestones.foodDone=true;
+  }
   var p=INDIV_PRIZES[idx];
   return{icon:p.icon,label:p.label,collectif:false};
 }
