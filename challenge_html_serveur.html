@@ -642,12 +642,12 @@ h1 .accent{color:#d63031}
             <line x1="100" y1="26" x2="100" y2="34" transform="rotate(101 100 100)"/>
             <line x1="100" y1="26" x2="100" y2="38" transform="rotate(135 100 100)"/>
           </g>
-          <g font-family="Audiowide" font-size="9" fill="#1a1a2e" text-anchor="middle">
-            <text x="58" y="146">0</text>
-            <text x="45" y="78">4</text>
-            <text x="100" y="42">8</text>
-            <text x="155" y="78">12</text>
-            <text x="142" y="146" fill="#b8860b" font-weight="700">16</text>
+          <g font-family="Audiowide" font-size="11" fill="#1a1a2e" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke fill">
+            <text x="58" y="148">0</text>
+            <text x="45" y="80">4</text>
+            <text x="100" y="44">8</text>
+            <text x="155" y="80">12</text>
+            <text x="142" y="148" fill="#b8860b" font-weight="700">16</text>
           </g>
           <text x="100" y="135" font-family="Outfit" font-weight="700" font-size="7" fill="#7f8c8d" text-anchor="middle">SEUIL ⚡16</text>
           <g id="regNeedle" transform="rotate(-135 100 100)">
@@ -682,12 +682,12 @@ h1 .accent{color:#d63031}
             <line x1="100" y1="26" x2="100" y2="34" transform="rotate(101 100 100)"/>
             <line x1="100" y1="26" x2="100" y2="38" transform="rotate(135 100 100)"/>
           </g>
-          <g id="odoLabelsG" font-family="Audiowide" font-size="9" fill="#1a1a2e" text-anchor="middle">
-            <text id="odoL1" x="58" y="146">0</text>
-            <text id="odoL2" x="45" y="78">5</text>
-            <text id="odoL3" x="100" y="42">10</text>
-            <text id="odoL4" x="155" y="78">15</text>
-            <text id="odoL5" x="142" y="146" fill="#b8860b" font-weight="700">20</text>
+          <g id="odoLabelsG" font-family="Audiowide" font-size="11" fill="#1a1a2e" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke fill">
+            <text id="odoL1" x="58" y="148">0</text>
+            <text id="odoL2" x="45" y="80">5</text>
+            <text id="odoL3" x="100" y="44">10</text>
+            <text id="odoL4" x="155" y="80">15</text>
+            <text id="odoL5" x="142" y="148" fill="#b8860b" font-weight="700">20</text>
           </g>
           <text id="odoTarget" x="0" y="0" text-anchor="middle" font-size="13" style="display:none">🎯</text>
           <text x="100" y="135" font-family="Outfit" font-weight="700" font-size="7" fill="#7f8c8d" text-anchor="middle">VENTES DU JOUR</text>
@@ -709,7 +709,7 @@ h1 .accent{color:#d63031}
       <div class="route-450-title">🛣️ LA ROUTE DU 450</div>
       <div class="route-450-labels">
         <span class="rl-tick" style="left:22.22%">100</span>
-        <span class="rl-milestone" style="left:44.44%">🎁 JALON 200</span>
+        <span class="rl-milestone" style="left:50%">🎁 JALON 225</span>
         <span class="rl-tick" style="left:66.67%">300</span>
         <span class="rl-tick" style="left:88.89%">400</span>
       </div>
@@ -882,7 +882,7 @@ var HEADERS = {'Content-Type':'application/json','X-Master-Key':API_KEY,'X-Bin-V
 // ===== CONFIG CHALLENGE =====
 var MONTH=4,YEAR=2026,N_DAYS=31;
 var MIN_BOOST=16,MAX_JOKERS=2;
-var TOTAL_BORNES=450,JALON_BORNES=200;
+var TOTAL_BORNES=450,JALON_BORNES=225;
 var DAYS=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
 var DAYS_FULL=['DIM','LUN','MAR','MER','JEU','VEN','SAM'];
 
@@ -912,7 +912,7 @@ var INDIV_PRIZES=[
 ];
 
 // Bons collectifs (2 cas exceptionnels uniquement)
-var COLLECTIF_RESTO={icon:'🛻',label:'Resto routier équipe !',collectif:true};
+var COLLECTIF_RESTO={icon:'🍽️',label:'Pause gastronomique pour l\'équipage !',collectif:true};
 var COLLECTIF_GLACES={icon:'🍦',label:'Tournée de glaces !',collectif:true};
 
 // Bons RDV (4 stations spéciales — 1 tous les 3 RDV)
@@ -956,8 +956,10 @@ function assess(i){
 }
 
 function cumulMonth(){
+  // Cumul = somme des ventes NETTES du mois (sans les reports, sinon double-comptage)
+  // car le report du jour J = ventes non-clôturées du jour J-1, déjà comptées dans sal[J-1]
   var ti=todayIdx(),tot=0;
-  for(var i=0;i<=ti;i++){if(S.sal[i]!==null) tot+=(S.sal[i]||0)+(S.rep[i]||0);}
+  for(var i=0;i<=ti;i++){if(S.sal[i]!==null) tot+=(S.sal[i]||0);}
   return tot;
 }
 
@@ -1607,9 +1609,9 @@ function saveVentes(){
   if(!S.jalon200Done&&prevCumulMonth<JALON_BORNES&&newCumulMonth>=JALON_BORNES){
     S.jalon200Done=true;var ts200=Date.now()+5;
     pushEvent('jalon200',{prize:COLLECTIF_RESTO,ts:ts200});
-    pushEvent('floating',{icon:'🎁',label:'JALON 200 BORNES !',size:'big'});
+    pushEvent('floating',{icon:'🍽️',label:'JALON 225 BORNES !',size:'big'});
     pushEvent('celebration',{kind:'jalon200'});
-    showFloatingIcon('🎁','JALON 200 BORNES !','big');
+    showFloatingIcon('🍽️','JALON 225 BORNES !','big');
     setTimeout(function(){showCelebration('jalon200');},800);
     setTimeout(function(){spawnGoldenTicketForAll(COLLECTIF_RESTO,ts200);},2200);
   }
@@ -1631,15 +1633,27 @@ function triggerGlaceCombo(){
 // ===== RANDOM PRIZE (sans répétition immédiate) =====
 function randomIndivPrize(){
   var li=S.milestones?S.milestones.lastIndivIdx:-1;
-  // Si un bon food a déjà été tiré aujourd'hui, exclure les food
   var foodAlready=S.milestones&&S.milestones.foodDone;
+  // Trouver l'index du ticket à gratter
+  var scratchIdx=-1;
+  for(var i=0;i<INDIV_PRIZES.length;i++){
+    if(INDIV_PRIZES[i].icon==='🍀'){scratchIdx=i;break;}
+  }
+  // 50% de chance : ticket à gratter (sauf si c'était déjà le dernier tirage)
+  if(scratchIdx>=0 && scratchIdx!==li && Math.random()<0.5){
+    if(S.milestones) S.milestones.lastIndivIdx=scratchIdx;
+    var p=INDIV_PRIZES[scratchIdx];
+    return{icon:p.icon,label:p.label,collectif:false};
+  }
+  // Sinon : tirage normal parmi les autres bons (sans le ticket à gratter pour éviter doublons)
   var av=[];
   for(var i=0;i<INDIV_PRIZES.length;i++){
-    if(i===li) continue; // pas le même qu'au tirage précédent
-    if(foodAlready && INDIV_PRIZES[i].food) continue; // pas de 2e food dans la journée
+    if(i===li) continue;
+    if(i===scratchIdx) continue;
+    if(foodAlready && INDIV_PRIZES[i].food) continue;
     av.push(i);
   }
-  // Fallback : si tout est exclu (cas rare), autorise tout sauf li
+  // Fallback : si tout exclu, autorise tout sauf li
   if(!av.length){
     for(var i=0;i<INDIV_PRIZES.length;i++){if(i!==li)av.push(i);}
   }
@@ -1876,7 +1890,7 @@ function showCelebration(type){
   var ov=document.createElement('div');ov.className='celebration-overlay';
   var icon,title,sub,cls;
   if(type==='obj'){icon='🎯';title='OBJECTIF<br>ATTEINT !';sub='L\'équipe est en feu ! 🔥';cls='obj-card';}
-  else if(type==='jalon200'){icon='🎁';title='JALON 200<br>FRANCHI !';sub='Resto routier pour toute l\'équipe ! 🛻';cls='boost-card';}
+  else if(type==='jalon200'){icon='🍽️';title='MOITIÉ DU TRAJET<br>FRANCHIE ! 🎉';sub='Bravo ! Une pause s\'impose pour bien finir le trajet.<br><br>L\'équipe se restaure au restaurant gastronomique<br><b>l\'Atelier Gourmand</b> à Saint-Jean-de-Beauregard 🍷';cls='boost-card';}
   else{icon='⚡';title='RÉGULATEUR<br>+20% VALIDÉ !';sub='Le bonus est déclenché ! 💰';cls='boost-card';}
   ov.innerHTML='<div class="celebration-card '+cls+'"><span class="cc-icon">'+icon+'</span><div class="cc-title">'+title+'</div><div class="cc-sub">'+sub+'</div><button onclick="this.closest(\'.celebration-overlay\').remove()">🔥 LET\'S GO !</button></div>';
   document.body.appendChild(ov);
