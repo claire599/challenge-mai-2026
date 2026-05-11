@@ -956,13 +956,11 @@ function assess(i){
 }
 
 function cumulMonth(){
-  // Cumul = somme des ventes RÉELLEMENT signées dans le mois
-  // sal[i] = total des ventes clôturées le jour i (incluant les reports d'hier clôturés ce jour)
-  // rep[i] = ventes non clôturées la veille, donc déjà comptées dans sal[i-1]
-  // Donc pour éviter le double-comptage : ventes nettes du jour i = sal[i] - rep[i]
+  // sal[i] = ventes NETTES saisies du jour i (les nouvelles ventes, hors reports)
+  // Total mois = simple somme des ventes nettes journalières
   var ti=todayIdx(),tot=0;
   for(var i=0;i<=ti;i++){
-    if(S.sal[i]!==null) tot+=Math.max(0,(S.sal[i]||0)-(S.rep[i]||0));
+    if(S.sal[i]!==null) tot+=(S.sal[i]||0);
   }
   return tot;
 }
@@ -1181,7 +1179,7 @@ function renderTotals(){
   for(var i=0;i<=ti;i++){
     var s=S.sal[i],o=S.obj[i]||0;
     if(s!==null){
-      totC+=(s||0)+(S.rep[i]||0);
+      totC+=(s||0);
       if(o>0)totO+=o;
       if(o>0&&WORKED[i]===1){if(assess(i).boostOk)ok++;else fail++;}
     }
