@@ -873,11 +873,12 @@ h1 .accent{color:#d63031}
 <div class="cc" id="cc"></div>
 
 <script>
-// ===== CONFIG JSONBin =====
-var BIN_ID  = '69f4cde9856a682189957a4e';
-var API_KEY = '$2a$10$j.EvQYa3TiVfgAxZJWVcPeMvrKUWQ83egNT9ugRIUkk.HacoWpioe';
-var BIN_URL = 'https://api.jsonbin.io/v3/b/'+BIN_ID;
-var HEADERS = {'Content-Type':'application/json','X-Master-Key':API_KEY,'X-Bin-Versioning':'false'};
+// ===== CONFIG SUPABASE =====
+var SUPABASE_URL = 'https://lpbdaaqenpbmrtyenqvq.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwYmRhYXFlbnBibXJ0eWVucXZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3ODYzMDAsImV4cCI6MjA5NTM2MjMwMH0.ArP-YGv3JFLa-1R1ZlNOIpaV8ekwJr3flEs2Rx6aLC4';
+var CHALLENGE_ID = 'mai-2026';
+var SB_BASE    = SUPABASE_URL+'/rest/v1/challenges?id=eq.'+CHALLENGE_ID;
+var SB_HEADERS = {'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Prefer':'return=minimal'};
 
 // ===== CONFIG CHALLENGE =====
 var MONTH=4,YEAR=2026,N_DAYS=31;
@@ -973,13 +974,14 @@ function objMonth(){
 
 // ===== SYNC =====
 function loadShared(){
-  return fetch(BIN_URL,{headers:{'X-Master-Key':API_KEY}})
+  return fetch(SB_BASE+'&select=data',{headers:SB_HEADERS})
   .then(function(r){
     if(!r.ok){throw new Error('GET HTTP '+r.status+' '+r.statusText);}
     return r.json();
   })
-  .then(function(j){
-    var p=j.record||j;
+  .then(function(rows){
+    if(!Array.isArray(rows)||!rows.length||!rows[0].data) return;
+    var p=rows[0].data;
     if(Array.isArray(p.obj)&&p.obj.length===N_DAYS) S.obj=p.obj;
     if(Array.isArray(p.rep)&&p.rep.length===N_DAYS) S.rep=p.rep;
     if(Array.isArray(p.sal)&&p.sal.length===N_DAYS){
@@ -1019,14 +1021,14 @@ function loadShared(){
 
 function saveShared(){
   if(S.events&&S.events.length>30) S.events=S.events.slice(-30);
-  return fetch(BIN_URL,{method:'PUT',headers:HEADERS,body:JSON.stringify(S)})
+  return fetch(SB_BASE,{method:'PATCH',headers:SB_HEADERS,body:JSON.stringify({data:S,updated_at:new Date().toISOString()})})
   .then(function(r){
     if(!r.ok){
       return r.text().then(function(body){
-        throw new Error('PUT HTTP '+r.status+' — '+body.substring(0,150));
+        throw new Error('PATCH HTTP '+r.status+' — '+body.substring(0,150));
       });
     }
-    return r.json();
+    return r.text();
   })
   .then(function(){sync('✅ Synchronisé · '+now());})
   .catch(function(e){
