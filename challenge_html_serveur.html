@@ -242,7 +242,7 @@ h1 .accent{color:#d63031}
 .plus-one{position:fixed;font-family:'Audiowide',sans-serif;font-size:3.5rem;font-weight:900;color:#f9ca24;text-shadow:0 0 20px rgba(249,202,36,.8);pointer-events:none;z-index:500;opacity:0}
 .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:#00b894;color:#fff;padding:10px 20px;border-radius:50px;font-weight:800;font-size:.85rem;opacity:0;transition:opacity .3s;z-index:300;white-space:nowrap}
 .toast.show{opacity:1}
-.cc{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:200}
+.cc{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10001}
 .flying-phone{position:fixed;font-size:2rem;pointer-events:none;z-index:550;filter:drop-shadow(0 0 8px rgba(0,206,201,.6))}
 
 /* ===== TABLETTE / PC ≥ 900px — compact mais lisible ===== */
@@ -873,12 +873,11 @@ h1 .accent{color:#d63031}
 <div class="cc" id="cc"></div>
 
 <script>
-// ===== CONFIG SUPABASE =====
-var SUPABASE_URL = 'https://lpbdaaqenpbmrtyenqvq.supabase.co';
-var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwYmRhYXFlbnBibXJ0eWVucXZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3ODYzMDAsImV4cCI6MjA5NTM2MjMwMH0.ArP-YGv3JFLa-1R1ZlNOIpaV8ekwJr3flEs2Rx6aLC4';
-var CHALLENGE_ID = 'mai-2026';
-var SB_BASE    = SUPABASE_URL+'/rest/v1/challenges?id=eq.'+CHALLENGE_ID;
-var SB_HEADERS = {'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Prefer':'return=minimal'};
+// ===== CONFIG JSONBin =====
+var BIN_ID  = '69f4cde9856a682189957a4e';
+var API_KEY = '$2a$10$j.EvQYa3TiVfgAxZJWVcPeMvrKUWQ83egNT9ugRIUkk.HacoWpioe';
+var BIN_URL = 'https://api.jsonbin.io/v3/b/'+BIN_ID;
+var HEADERS = {'Content-Type':'application/json','X-Master-Key':API_KEY,'X-Bin-Versioning':'false'};
 
 // ===== CONFIG CHALLENGE =====
 var MONTH=4,YEAR=2026,N_DAYS=31;
@@ -915,6 +914,8 @@ var INDIV_PRIZES=[
 // Bons collectifs (2 cas exceptionnels uniquement)
 var COLLECTIF_RESTO={icon:'🍽️',label:'Pause gastronomique pour l\'équipage !',collectif:true};
 var COLLECTIF_GLACES={icon:'🍦',label:'Tournée de glaces !',collectif:true};
+var INDIV_FINISHER={icon:'🎟️',label:'Pochette tickets à gratter (FINISHER) !',collectif:false};
+var COLLECTIF_CHAMPAGNE={icon:'🍾',label:'Soirée champagne d\'arrivée (1 bouteille/personne) !',collectif:true};
 
 // Bons RDV (4 stations spéciales — 1 tous les 3 RDV)
 var RDV_PRIZES=[
@@ -933,7 +934,8 @@ var S={
   sal:new Array(N_DAYS).fill(null),rdv:new Array(N_DAYS).fill(null),
   jokers:new Array(N_DAYS).fill(false),
   milestones:null,events:[],wonTickets:[],trophies:[],
-  jalon200Done:false
+  jalon200Done:false,
+  jalon450Done:false
 };
 var wonTickets=[],shownTrophies=[],lastSeenEventTs=0,collectedTicketTs=[];
 
@@ -974,14 +976,13 @@ function objMonth(){
 
 // ===== SYNC =====
 function loadShared(){
-  return fetch(SB_BASE+'&select=data',{headers:SB_HEADERS})
+  return fetch(BIN_URL,{headers:{'X-Master-Key':API_KEY}})
   .then(function(r){
     if(!r.ok){throw new Error('GET HTTP '+r.status+' '+r.statusText);}
     return r.json();
   })
-  .then(function(rows){
-    if(!Array.isArray(rows)||!rows.length||!rows[0].data) return;
-    var p=rows[0].data;
+  .then(function(j){
+    var p=j.record||j;
     if(Array.isArray(p.obj)&&p.obj.length===N_DAYS) S.obj=p.obj;
     if(Array.isArray(p.rep)&&p.rep.length===N_DAYS) S.rep=p.rep;
     if(Array.isArray(p.sal)&&p.sal.length===N_DAYS){
@@ -996,6 +997,7 @@ function loadShared(){
     if(Array.isArray(p.wonTickets)) S.wonTickets=p.wonTickets;
     if(Array.isArray(p.trophies)) S.trophies=p.trophies;
     if(typeof p.jalon200Done==='boolean') S.jalon200Done=p.jalon200Done;
+    if(typeof p.jalon450Done==='boolean') S.jalon450Done=p.jalon450Done;
     var ti=todayIdx(),todayStr=todayKey();
     if(S.milestones&&(S.milestones.day!==ti||!S.milestones.m1||!S.milestones.m2)) S.milestones=null;
     wonTickets=S.wonTickets.filter(function(t){return t.day===todayStr;});
@@ -1021,14 +1023,14 @@ function loadShared(){
 
 function saveShared(){
   if(S.events&&S.events.length>30) S.events=S.events.slice(-30);
-  return fetch(SB_BASE,{method:'PATCH',headers:SB_HEADERS,body:JSON.stringify({data:S,updated_at:new Date().toISOString()})})
+  return fetch(BIN_URL,{method:'PUT',headers:HEADERS,body:JSON.stringify(S)})
   .then(function(r){
     if(!r.ok){
       return r.text().then(function(body){
-        throw new Error('PATCH HTTP '+r.status+' — '+body.substring(0,150));
+        throw new Error('PUT HTTP '+r.status+' — '+body.substring(0,150));
       });
     }
-    return r.text();
+    return r.json();
   })
   .then(function(){sync('✅ Synchronisé · '+now());})
   .catch(function(e){
@@ -1046,6 +1048,7 @@ function playEvent(ev){
   else if(ev.type==='turboF1') spawnTurboAnim();
   else if(ev.type==='regulateurCard') spawnRegulateurAnim();
   else if(ev.type==='earlyBirdAnim') spawnEarlyBirdAnim();
+  else if(ev.type==='finalArrivee') spawnFinalArrivee();
 }
 
 function sync(m,c){var b=document.getElementById('syncBar');b.textContent=m;b.style.color=c||'#00b894';}
@@ -1619,6 +1622,20 @@ function saveVentes(){
     setTimeout(function(){showCelebration('jalon200');},800);
     setTimeout(function(){spawnGoldenTicketForAll(COLLECTIF_RESTO,ts200);},2200);
   }
+  // 🏁 ARRIVÉE SAINT-MALO (450 bornes)
+  if(!S.jalon450Done&&prevCumulMonth<TOTAL_BORNES&&newCumulMonth>=TOTAL_BORNES){
+    S.jalon450Done=true;
+    var ts450a=Date.now()+6,ts450b=Date.now()+7;
+    pushEvent('jalon450indiv',{prize:INDIV_FINISHER,ts:ts450a});
+    pushEvent('jalon450coll',{prize:COLLECTIF_CHAMPAGNE,ts:ts450b});
+    pushEvent('finalArrivee',{});
+    pushEvent('celebration',{kind:'jalon450'});
+    pushEvent('floating',{icon:'🏁',label:'ARRIVÉE À SAINT-MALO !',size:'big'});
+    spawnFinalArrivee();
+    setTimeout(function(){showCelebration('jalon450');},2000);
+    setTimeout(function(){spawnGoldenTicketForAll(INDIV_FINISHER,ts450a);},4500);
+    setTimeout(function(){spawnGoldenTicketForAll(COLLECTIF_CHAMPAGNE,ts450b);},6000);
+  }
 
   // 4) SAVE EN BACKGROUND TOTAL (fire-and-forget, pas bloquant)
   sync('⏳ Sync…','#7f8c8d');
@@ -1890,11 +1907,59 @@ function showFloatingIcon(icon,label,size){
   if(isBig){launchConfetti();setTimeout(launchConfetti,300);setTimeout(launchConfetti,600);}
 }
 
+// 🏁 Animation d'arrivée à Saint-Malo (450 bornes franchies)
+function spawnFinalArrivee(){
+  var styleEl=document.createElement('style');
+  styleEl.textContent=
+    '@keyframes finalBgFade{0%{opacity:0}8%{opacity:.92}82%{opacity:.92}100%{opacity:0}}'+
+    '@keyframes finalTxtIn{'+
+      '0%{transform:translateY(-100vh) scale(0.5) rotate(-20deg);opacity:0}'+
+      '15%{transform:translateY(20px) scale(1.15) rotate(8deg);opacity:1}'+
+      '22%{transform:translateY(-40px) scale(0.95) rotate(-5deg)}'+
+      '30%{transform:translateY(10px) scale(1.05) rotate(3deg)}'+
+      '38%{transform:translateY(-12px) scale(1) rotate(-1deg)}'+
+      '46%{transform:translateY(0) scale(1) rotate(0)}'+
+      '82%{transform:translateY(0) scale(1) rotate(0);opacity:1}'+
+      '100%{transform:translateY(-40px) scale(0.7);opacity:0}'+
+    '}';
+  document.head.appendChild(styleEl);
+  // Overlay damier
+  var ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;'+
+    'background:repeating-conic-gradient(#1a1a2e 0deg 90deg,#fff 90deg 180deg) 0 0/40px 40px;'+
+    'opacity:0;animation:finalBgFade 6s ease-out forwards';
+  document.body.appendChild(ov);
+  // Bloc texte central
+  var txt=document.createElement('div');
+  txt.style.cssText='text-align:center;font-family:Bebas Neue,sans-serif;letter-spacing:.05em;'+
+    'animation:finalTxtIn 6s ease-out forwards;'+
+    'background:linear-gradient(135deg,#f9ca24,#f0932b);padding:30px 40px;border-radius:20px;border:4px solid #1a1a2e;box-shadow:0 12px 40px rgba(0,0,0,.5)';
+  txt.innerHTML=
+    '<div style="font-size:4.5rem;line-height:1;margin-bottom:6px">🏁</div>'+
+    '<div style="font-size:3.2rem;line-height:1;color:#1a1a2e;text-shadow:2px 2px 0 #fff">SAINT-MALO !</div>'+
+    '<div style="font-family:Audiowide,sans-serif;font-size:1.1rem;color:#1a1a2e;margin-top:14px;letter-spacing:2px">450 BORNES ATTEINTES</div>'+
+    '<div style="font-family:Outfit,sans-serif;font-size:.95rem;color:#1a1a2e;margin-top:6px;font-weight:700">🥂 BRAVO L\'ÉQUIPAGE !</div>';
+  ov.appendChild(txt);
+  // Nettoyage
+  setTimeout(function(){
+    if(ov.parentNode)ov.remove();
+    if(styleEl.parentNode)styleEl.remove();
+  },6200);
+  // Confettis en rafales
+  launchConfetti();
+  setTimeout(launchConfetti,500);
+  setTimeout(launchConfetti,1000);
+  setTimeout(launchConfetti,1500);
+  setTimeout(launchConfetti,2000);
+  setTimeout(launchConfetti,2500);
+}
+
 function showCelebration(type){
   var ov=document.createElement('div');ov.className='celebration-overlay';
   var icon,title,sub,cls;
   if(type==='obj'){icon='🎯';title='OBJECTIF<br>ATTEINT !';sub='L\'équipe est en feu ! 🔥';cls='obj-card';}
   else if(type==='jalon200'){icon='🍽️';title='MOITIÉ DU TRAJET<br>FRANCHIE ! 🎉';sub='Bravo ! Une pause s\'impose pour bien finir le trajet.<br><br>L\'équipe se restaure au restaurant gastronomique<br><b>l\'Atelier Gourmand</b> à Saint-Jean-de-Beauregard 🍷';cls='boost-card';}
+  else if(type==='jalon450'){icon='🏆';title='ARRIVÉE À<br>SAINT-MALO ! 🏁';sub='450 BORNES ACCOMPLIES, BRAVO L\'ÉQUIPAGE ! 🥂<br><br><b>🎟️ Pochette tickets à gratter</b> pour le sales finisher !<br><br><b>🍾 Soirée champagne d\'arrivée</b> à destination, 1 bouteille par personne !';cls='boost-card';}
   else{icon='⚡';title='RÉGULATEUR<br>+20% VALIDÉ !';sub='Le bonus est déclenché ! 💰';cls='boost-card';}
   ov.innerHTML='<div class="celebration-card '+cls+'"><span class="cc-icon">'+icon+'</span><div class="cc-title">'+title+'</div><div class="cc-sub">'+sub+'</div><button onclick="this.closest(\'.celebration-overlay\').remove()">🔥 LET\'S GO !</button></div>';
   document.body.appendChild(ov);
@@ -2013,11 +2078,12 @@ function showPalmares(){
 
 function replayCelebrations(){
   var ti=todayIdx(),todayStart=new Date(YEAR,MONTH,ti+1).getTime();
-  var REPLAYABLE=['celebration','floating','objectifFlag','turboF1','regulateurCard','earlyBirdAnim'];
+  var REPLAYABLE=['celebration','floating','objectifFlag','turboF1','regulateurCard','earlyBirdAnim','finalArrivee'];
   var evs=S.events?S.events.filter(function(ev){return ev.ts>=todayStart&&REPLAYABLE.indexOf(ev.type)>=0;}):[];
   if(!evs.length){showToast('Aucune célébration aujourd\'hui encore !');return;}
   // Délais adaptés selon le type (animations longues = plus de temps)
   function durationFor(t){
+    if(t==='finalArrivee') return 6500;
     if(t==='objectifFlag') return 4000;
     if(t==='turboF1') return 3500;
     if(t==='regulateurCard') return 3500;
