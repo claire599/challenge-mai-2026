@@ -874,10 +874,11 @@ h1 .accent{color:#d63031}
 
 <script>
 // ===== CONFIG JSONBin =====
-var BIN_ID  = '69f4cde9856a682189957a4e';
-var API_KEY = '$2a$10$j.EvQYa3TiVfgAxZJWVcPeMvrKUWQ83egNT9ugRIUkk.HacoWpioe';
-var BIN_URL = 'https://api.jsonbin.io/v3/b/'+BIN_ID;
-var HEADERS = {'Content-Type':'application/json','X-Master-Key':API_KEY,'X-Bin-Versioning':'false'};
+// ===== SUPABASE (sync) — migré depuis JSONBin le 26 mai 2026 =====
+var SB_BASE = 'https://lpbdaaqenpbmrtyenqvq.supabase.co';
+var SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwYmRhYXFlbnBibXJ0eWVucXZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3ODYzMDAsImV4cCI6MjA5NTM2MjMwMH0.ArP-YGv3JFLa-1R1ZlNOIpaV8ekwJr3flEs2Rx6aLC4';
+var SB_URL  = SB_BASE+'/rest/v1/challenges?id=eq.mai-2026';
+var SB_HEADERS = {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
 
 // ===== CONFIG CHALLENGE =====
 var MONTH=4,YEAR=2026,N_DAYS=31;
@@ -976,13 +977,15 @@ function objMonth(){
 
 // ===== SYNC =====
 function loadShared(){
-  return fetch(BIN_URL,{headers:{'X-Master-Key':API_KEY}})
+  return fetch(SB_URL,{headers:SB_HEADERS})
   .then(function(r){
     if(!r.ok){throw new Error('GET HTTP '+r.status+' '+r.statusText);}
     return r.json();
   })
-  .then(function(j){
-    var p=j.record||j;
+  .then(function(arr){
+    var row=arr&&arr[0];
+    if(!row||!row.data){throw new Error('Pas de données Supabase pour mai-2026');}
+    var p=row.data;
     if(Array.isArray(p.obj)&&p.obj.length===N_DAYS) S.obj=p.obj;
     if(Array.isArray(p.rep)&&p.rep.length===N_DAYS) S.rep=p.rep;
     if(Array.isArray(p.sal)&&p.sal.length===N_DAYS){
@@ -1023,14 +1026,20 @@ function loadShared(){
 
 function saveShared(){
   if(S.events&&S.events.length>30) S.events=S.events.slice(-30);
-  return fetch(BIN_URL,{method:'PUT',headers:HEADERS,body:JSON.stringify(S)})
+  var headers={};for(var k in SB_HEADERS)headers[k]=SB_HEADERS[k];headers['Prefer']='return=minimal';
+  return fetch(SB_URL,{
+    method:'PATCH',
+    headers:headers,
+    body:JSON.stringify({data:S,updated_at:new Date().toISOString()})
+  })
   .then(function(r){
     if(!r.ok){
       return r.text().then(function(body){
-        throw new Error('PUT HTTP '+r.status+' — '+body.substring(0,150));
+        throw new Error('PATCH HTTP '+r.status+' — '+body.substring(0,150));
       });
     }
-    return r.json();
+    // Supabase avec Prefer:return=minimal renvoie 204 No Content
+    return null;
   })
   .then(function(){sync('✅ Synchronisé · '+now());})
   .catch(function(e){
